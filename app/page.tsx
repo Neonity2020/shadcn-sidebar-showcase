@@ -24,29 +24,29 @@ interface Project {
 const projects: Project[] = [
   { 
     id: 1, 
-    name: "电商平台", 
+    name: "(Brain Imaging) Anne G. Osborn, Gary L. Hedlund, Karen L. Salzman - Osborn’s Brain_ imaging, pathology, and anatomy-Elsevier (2018)", 
     status: "进行中", 
-    description: "基于Next.js的全栈电商解决方案", 
+    description: "奥斯本脑影像", 
     progress: 75,
-    directories: ["src", "public", "components", "pages"],
-    downloadUrl: "https://pan.baidu.com/s/1jC9lRkNi5QwZ-rcH17mGQQ?pwd=8945"
+    directories: ["解剖", "影像", "病理"],
+    downloadUrl: "https://pan.baidu.com/s/1pVmRGWXyES7A589J8z_COg?pwd=45yj"
   },
   { 
     id: 2, 
-    name: "数据分析", 
+    name: "神经影像学", 
     status: "已完成", 
-    description: "实时数据可视化仪表盘", 
+    description: "神经影像学", 
     progress: 100,
-    directories: ["analytics", "dashboard", "reports"],
+    directories: ["解剖", "影像", "病理"],
     downloadUrl: "https://example.com/download/2"
   },
   { 
     id: 3, 
-    name: "移动应用", 
+    name: "Diagnostic Imaging Cardiovascular", 
     status: "规划中", 
-    description: "跨平台React Native应用", 
+    description: "Diagnostic Imaging Cardiovascular", 
     progress: 20,
-    directories: ["mobile", "assets", "screens"],
+    directories: ["解剖", "影像", "病理"],
     downloadUrl: "https://example.com/download/3"
   }
 ]
@@ -63,7 +63,7 @@ export default function Page() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbPage>项目列表</BreadcrumbPage>
+                  <BreadcrumbPage>最近在读</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

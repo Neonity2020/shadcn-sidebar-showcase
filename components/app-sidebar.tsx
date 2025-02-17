@@ -29,9 +29,9 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Neonity",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "超级管理员",
     },
     {
       name: "Acme Corp.",
@@ -46,7 +46,7 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "My-Books",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
@@ -66,7 +66,7 @@ const data = {
       ],
     },
     {
-      title: "Models",
+      title: "AI-Assistants",
       url: "#",
       icon: Bot,
       items: [
@@ -133,17 +133,17 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "MRI-Technique",
       url: "#",
       icon: Frame,
     },
     {
-      name: "Sales & Marketing",
+      name: "MRI-Diagnosis",
       url: "#",
       icon: PieChart,
     },
     {
-      name: "Travel",
+      name: "MRI-Pathology",
       url: "#",
       icon: Map,
     },
