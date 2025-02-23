@@ -134,7 +134,7 @@ const data = {
   projects: [
     {
       name: "MRI-Technique",
-      url: "#",
+      url: "/mri-techs/",
       icon: Frame,
     },
     {
@@ -143,7 +143,7 @@ const data = {
       icon: PieChart,
     },
     {
-      name: "MRI-Pathology",
+      name: "MRI-Principles",
       url: "#",
       icon: Map,
     },

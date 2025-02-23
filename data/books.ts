@@ -42,12 +42,12 @@ export const books: Book[] = [
   },
   { 
     id: 4,
-    title: "MRI脑部扫描",
+    title: "MRI at a Glance",
     cover: "/covers/4.jpg",
     status: "reading",
-    description: "阿尔茨海默症早期诊断研究",
+    description: "MRI at a Glance MRI知识速览",
     progress: 60,
-    directories: ["影像", "报告", "数据分析"],
+    directories: ["MRI原理", "MRI技术", "MRI诊断"],
     downloadUrl: "https://pan.baidu.com/s/2bVmRGWXyES7A589J8z_COg?pwd=78xj"
   },
   { 
