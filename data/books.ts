@@ -52,10 +52,10 @@ export const books: Book[] = [
   },
   { 
     id: 5,
-    title: "CT血管造影",
+    title: "Duke Review",
     cover: "/covers/5.jpg",
     status: "paused",
-    description: "脑血管3D重建分析",
+    description: "杜克Review",
     progress: 15,
     directories: ["血管影像", "三维模型", "诊断报告"],
     downloadUrl: "https://example.com/download/5"

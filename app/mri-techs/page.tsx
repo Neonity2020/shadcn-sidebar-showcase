@@ -51,14 +51,19 @@ export default function MRITechniquesPage() {
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-xl font-semibold text-blue-600">T1加权成像</h2>
                 <div className="mt-4 space-y-3">
-                  <p className="text-gray-700">▪ 原理：测量纵向磁化恢复</p>
-                  <p className="text-gray-700">▪ 特点：解剖结构清晰显示</p>
-                  <p className="text-gray-700">▪ 应用：脑组织解剖观察</p>
-                  <img 
-                    src="/placeholder-t1.png" 
-                    alt="T1加权示例"
-                    className="mt-4 rounded-lg w-full h-48 object-cover"
-                  />
+                  <div>
+                    <p className="text-gray-700">▪ 原理：测量纵向磁化恢复</p>
+                    <p className="text-gray-700">▪ 特点：解剖结构清晰显示</p>
+                    <p className="text-gray-700">▪ 应用：脑组织解剖观察</p>
+                  </div>
+                  <div>
+                    <img 
+                      src="/project-images/T1WI.jpeg" 
+                      alt="T1加权示例"
+                      className="mt-4 rounded-lg w-full h-48 object-cover"
+                    />
+                  </div>
+
                 </div>
               </div>
 
@@ -66,14 +71,18 @@ export default function MRITechniquesPage() {
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-xl font-semibold text-blue-600">T2加权成像</h2>
                 <div className="mt-4 space-y-3">
-                  <p className="text-gray-700">▪ 原理：检测横向磁化衰减</p>
-                  <p className="text-gray-700">▪ 特点：对水肿敏感</p>
-                  <p className="text-gray-700">▪ 应用：病理变化检测</p>
-                  <img 
-                    src="/placeholder-t2.png" 
-                    alt="T2加权示例"
-                    className="mt-4 rounded-lg w-full h-48 object-cover"
-                  />
+                  <div>
+                    <p className="text-gray-700">▪ 原理：检测横向磁化衰减</p>
+                    <p className="text-gray-700">▪ 特点：对水肿敏感</p>
+                    <p className="text-gray-700">▪ 应用：病理变化检测</p>
+                  </div>
+                  <div>
+                    <img 
+                      src="/project-images/T2WI.jpeg" 
+                      alt="T1加权示例"
+                      className="mt-4 rounded-lg w-full h-48 object-cover"
+                    />
+                  </div>
                 </div>
               </div>
 

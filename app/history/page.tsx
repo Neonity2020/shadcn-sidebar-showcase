@@ -36,6 +36,10 @@ export default function Page() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
+                  <BreadcrumbLink href="/">首页</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
                   <BreadcrumbPage>最近在读</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
