@@ -131,7 +131,117 @@ _**Assistant**_
 
 接下来，我需要检查现有的页面组件MRITechniquesPage，看看它是否被包裹在布局中。根据用户提供的当前文件，这个页面是独立的，没有使用布局。因此，需要创建一个新的布局组件，并在页面中使用它。
 
-然后，考虑布局的结构。通常包括导航栏、主内容区和页脚。导航栏应该包含到首页和其他相关页面的链接，页
+然后，考虑布局的结构。通常包括导航栏、主内容区和页脚。导航栏应该包含到首页和其他相关页面的链接，页脚可能有版权信息等。使用Tailwind CSS来设计这些元素的样式，保持与现有页面一致的外观。
+
+还需要确保布局是响应式的，适应不同设备的屏幕尺寸。导航栏在移动端可能需要折叠菜单，但用户当前页面没有复杂菜单，所以简单的导航链接即可。
+
+最后，修改MRITechniquesPage组件，用新创建的布局包裹其内容。这样，页面内容会自动嵌入到布局中，保持整体一致。同时，要指导用户如何将其他页面也应用这个布局，确保项目结构统一。
+
+需要注意的是，如果用户使用的是Next.js的App Router，根布局应该放在app/layout.tsx中，页面组件作为子组件。因此，可能需要调整文件结构，确保布局正确应用。同时，提醒用户替换导航中的链接和页脚信息，根据实际项目需求进行调整。
+</think>
+
+```typescript:app/layout.tsx
+import type { Metadata } from 'next'
+import './globals.css'
+
+export const metadata: Metadata = {
+  title: '医学影像技术平台',
+  description: '医学影像技术教学与研究平台',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="zh-CN">
+      <body className="min-h-screen flex flex-col">
+        {/* 导航栏 */}
+        <nav className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16">
+              <div className="flex-shrink-0 flex items-center">
+                <h1 className="text-2xl font-bold text-blue-600">MRI TechLab</h1>
+              </div>
+              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a 
+                  href="/" 
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  首页
+                </a>
+                <a 
+                  href="/mri-techs" 
+                  className="bg-blue-100 text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  成像技术
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        {/* 主内容区 */}
+        <main className="flex-1 bg-gray-50">
+          {children}
+        </main>
+
+        {/* 页脚 */}
+        <footer className="bg-white border-t mt-12">
+          <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <p className="text-center text-gray-500 text-sm">
+              © {new Date().getFullYear()} 医学影像技术平台. 保留所有权利。
+            </p>
+          </div>
+        </footer>
+      </body>
+    </html>
+  )
+}
+```
+
+```typescript:app/mri-techs/page.tsx
+// ... existing imports ...
+
+export default function MRITechniquesPage() {
+  return (
+    // 移除最外层容器，使用布局中的结构
+    <>
+      {/* 头部迁移到布局中 */}
+      <main className="max-w-7xl mx-auto py-8 px-4">
+        // ... 保持原有内容不变 ...
+      </main>
+    </>
+  )
+}
+```
+
+主要改进点：
+
+1. 创建全局布局文件 `layout.tsx` 包含：
+   - 响应式导航栏（当前页面高亮显示）
+   - 统一页脚
+   - 全局CSS设置
+   - 元数据配置
+
+2. 页面结构调整：
+   - 移除重复的页面容器
+   - 头部迁移到布局组件
+   - 保持技术内容部分不变
+
+3. 新增功能：
+   - 自动年份显示的页脚
+   - 导航栏活动状态指示
+   - 全局字体和背景色设置
+
+使用说明：
+1. 将布局文件放在app目录下
+2. 所有页面会自动继承布局结构
+3. 导航栏高亮状态通过当前路由自动匹配
+4. 页脚年份自动更新
+
+可以通过在导航栏数组中添加更多链接来扩展功能，同时保持整体布局一致。
 
 ---
 

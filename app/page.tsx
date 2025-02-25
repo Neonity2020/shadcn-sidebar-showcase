@@ -12,7 +12,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { useState } from "react"
-import { Book, books } from "@/data/books"
+import { books } from "@/data/books"
 
 export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);

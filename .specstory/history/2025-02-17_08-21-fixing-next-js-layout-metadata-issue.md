@@ -130,6 +130,38 @@ export default function RootLayout({
 
 ---
 
+_**User**_
+
+For the code present, we get this error:
+```
+已声明“Book”，但从未读取其值。
+```
+How can I resolve this? If you propose a fix, please make it concise.
+
+---
+
+_**Assistant**_
+
+我注意到在 `app/history/page.tsx` 和 `app/page.tsx` 中都导入了 `Book` 类型但没有使用它。让我们移除未使用的导入。
+
+```typescript:app/history/page.tsx
+// ... existing code ...
+import { books } from "@/data/books"
+// ... existing code ...
+```
+
+```typescript:app/page.tsx
+// ... existing code ...
+import { books } from "@/data/books"
+// ... existing code ...
+```
+
+修改说明：
+- 从两个文件中移除了未使用的 `Book` 类型导入
+- 保留 `books` 导入因为它在代码中被使用
+
+---
+
 
 
 ---

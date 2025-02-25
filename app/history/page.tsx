@@ -11,7 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { useState } from "react"
-import { Book, books } from "@/data/books"
+import { books } from "@/data/books"
 import { BookCard } from "@/components/book-card"
 import { AppSidebar } from "@/components/app-sidebar"
 
