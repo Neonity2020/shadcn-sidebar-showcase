@@ -733,11 +733,9 @@ export default function MRIBookshelfPage() {
         <Dialog open={isReaderOpen} onOpenChange={setIsReaderOpen}>
           <DialogContent 
             hideCloseButton={true} 
-            className="max-w-5xl w-[95vw] h-[90vh] sm:h-[80vh] p-0 overflow-hidden"
+            className="max-w-5xl w-[95vw] h-[90vh] sm:h-[80vh] p-0 overflow-hidden bg-card"
           >
-            <div className="flex flex-col h-full bg-background">
-              <BookReader book={selectedBook} onClose={handleCloseReader} />
-            </div>
+            <BookReader book={selectedBook} onClose={handleCloseReader} />
           </DialogContent>
         </Dialog>
       )}
