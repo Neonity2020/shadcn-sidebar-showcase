@@ -59,32 +59,45 @@ export default function MRIDictionaryPage() {
             {/* 词条列表 */}
             <div className="grid gap-6">
               {filteredEntries.map((entry, index) => (
-                <Card key={index} className="p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
-                  <h2 className="text-xl font-semibold mb-3 text-blue-600">{entry.term}</h2>
-                  <p className="text-gray-600 mb-4 leading-relaxed">{entry.definition}</p>
-                  <span className="inline-block bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
-                    {entry.category}
-                  </span>
-                  {entry.relatedReadings && (
-                    <div className="mt-2">
-                      <p className="text-gray-600 text-sm font-medium">
-                        相关阅读:
-                      </p>
-                      <ul className="list-disc pl-5">
-                        {entry.relatedReadings.map((reading, index) => (
-                          <li key={index}>
-                            <Link 
-                              href={reading.url} 
-                              className={`text-blue-600 hover:underline inline-flex items-center gap-1
-                                ${reading.url.startsWith('http') ? 'after:content-["↗"] after:text-xs after:ml-0.5' : ''}`}
-                              target={reading.url.startsWith('http') ? "_blank" : undefined}
-                              rel={reading.url.startsWith('http') ? "noopener noreferrer" : undefined}
-                            >
-                              {reading.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                <Card key={index} className="p-6 bg-white shadow-md hover:shadow-lg transition-shadow flex flex-col sm:flex-row items-stretch">
+                  <div className="flex-grow pr-0 sm:pr-4">
+                    <h2 className="text-xl font-semibold mb-3 text-blue-600">{entry.term}</h2>
+                    <p className="text-gray-600 mb-4 leading-relaxed">{entry.definition}</p>
+                    <span className="inline-block bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
+                      {entry.category}
+                    </span>
+                    {entry.relatedReadings && (
+                      <div className="mt-2">
+                        <p className="text-gray-600 text-sm font-medium">
+                          相关阅读:
+                        </p>
+                        <ul className="list-disc pl-5">
+                          {entry.relatedReadings.map((reading, index) => (
+                            <li key={index}>
+                              <Link 
+                                href={reading.url} 
+                                className={`text-blue-600 hover:underline inline-flex items-center gap-1
+                                  ${reading.url.startsWith('http') ? 'after:content-["↗"] after:text-xs after:ml-0.5' : ''}`}
+                                target={reading.url.startsWith('http') ? "_blank" : undefined}
+                                rel={reading.url.startsWith('http') ? "noopener noreferrer" : undefined}
+                              >
+                                {reading.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                  {entry.image && (
+                    <div className="flex-shrink-0 w-full sm:w-48 h-36 mt-4 sm:mt-0 sm:ml-4">
+                      <div className="relative w-full h-full">
+                        <img 
+                          src={entry.image} 
+                          alt={`${entry.term}示意图`} 
+                          className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                        />
+                      </div>
                     </div>
                   )}
                 </Card>

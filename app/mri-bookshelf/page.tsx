@@ -104,11 +104,21 @@ function BookReader({ book, onClose }: { book: Book, onClose: () => void }) {
       setIsFullScreen(!!fullscreenElement);
     };
 
-    // 添加事件监听器
+    // 添加全屏变化事件监听器
     document.addEventListener('fullscreenchange', handleFullScreenChange);
     document.addEventListener('mozfullscreenchange', handleFullScreenChange);
     document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
     document.addEventListener('msfullscreenchange', handleFullScreenChange);
+
+    // 添加键盘事件监听器
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // 阻止默认行为
+        toggleFullScreen();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
 
     // 清理函数
     return () => {
@@ -116,6 +126,7 @@ function BookReader({ book, onClose }: { book: Book, onClose: () => void }) {
       document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
       document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
       document.removeEventListener('msfullscreenchange', handleFullScreenChange);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -374,7 +385,7 @@ function BookReader({ book, onClose }: { book: Book, onClose: () => void }) {
                     
                     {/* 页面内容预览 */}
                     <div className="not-prose my-6 bg-muted/30 rounded-lg p-6">
-                      <h2 className="text-xl font-semibold mb-4">第 {currentPage} 页内容预览</h2>
+                      <h2 className="text-xl font-semibold mb-4">第 {currentPage} 页 内容预览 (非原文；AI 生成示例)</h2>
                       <p className="text-base mb-4">
                         {getCurrentPageContent().text || "暂无页面内容预览"}
                       </p>

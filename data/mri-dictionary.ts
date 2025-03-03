@@ -7,6 +7,7 @@ export interface DictionaryEntry {
     title: string
     url: string
   }[]
+  image?: string
 }
 
 export const dictionaryData: DictionaryEntry[] = [
@@ -14,6 +15,7 @@ export const dictionaryData: DictionaryEntry[] = [
     term: 'T1加权像',
     definition: '一种基本的MRI扫描序列，主要用于显示解剖结构。脂肪在T1加权像中呈现高信号（亮），而水呈现低信号（暗）。',
     category: '扫描序列',
+    image: '/project-images/T1WI.jpeg',
     relatedReadings: [
       {
         title: 'T1加权成像的基本原理',
@@ -24,7 +26,14 @@ export const dictionaryData: DictionaryEntry[] = [
     {
       term: 'T2加权像',
       definition: '另一种基本的MRI扫描序列，主要用于显示病理改变。水在T2加权像中呈现高信号（亮），而脂肪呈现中等信号。',
-      category: '扫描序列'
+      category: '扫描序列',
+      image: '/project-images/T2WI.jpeg',
+      relatedReadings: [
+        {
+          title: 'T2加权成像的基本原理',
+          url: '/articles/t2-weighted-imaging'
+        }
+      ]
     },
     {
       term: 'FLAIR',
