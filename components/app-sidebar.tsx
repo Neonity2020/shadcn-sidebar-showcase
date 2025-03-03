@@ -6,6 +6,7 @@ import {
   BookOpen,
   Bot,
   Command,
+  FileText,
   Frame,
   GalleryVerticalEnd,
   Map,
@@ -65,6 +66,29 @@ const data = {
         },
         {
           title: "Settings",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "文件管理",
+      url: "/files",
+      icon: FileText,
+      items: [
+        {
+          title: "全部文件",
+          url: "/files",
+        },
+        {
+          title: "最近文件",
+          url: "#",
+        },
+        {
+          title: "共享文件",
+          url: "#",
+        },
+        {
+          title: "回收站",
           url: "#",
         },
       ],

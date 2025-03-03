@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { books as initialBooks } from "@/data/books";
 import { BookCard } from "@/components/book-card";
 import { Button } from "@/components/ui/button";
@@ -15,52 +15,413 @@ import { Book } from "@/data/books";
 
 // 阅读器组件
 function BookReader({ book, onClose }: { book: Book, onClose: () => void }) {
+  const [showBookmarks, setShowBookmarks] = useState(false);
+  const [showHighlights, setShowHighlights] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
+  const [currentPage, setCurrentPage] = useState<number>(
+    book.readingMode?.currentPage ?? 1
+  );
+
+  // 格式化时间戳
+  const formatDate = (timestamp: string) => {
+    return new Date(timestamp).toLocaleString('zh-CN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  // 获取当前页面内容
+  const getCurrentPageContent = () => {
+    const defaultContent = {
+      text: "暂无页面内容预览",
+      keywords: [] as string[],
+      imageDescriptions: [] as string[]
+    };
+
+    if (!book.pageContent) return defaultContent;
+    
+    const pageContent = book.pageContent[currentPage];
+    return {
+      text: pageContent?.text || defaultContent.text,
+      keywords: pageContent?.keywords || defaultContent.keywords,
+      imageDescriptions: pageContent?.imageDescriptions || defaultContent.imageDescriptions
+    };
+  };
+
+  // 处理翻页
+  const handlePageChange = (newPage: number) => {
+    const totalPages = book.readingMode?.totalPages ?? 1;
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  // 切换全屏模式
+  const toggleFullScreen = () => {
+    if (!isFullScreen) {
+      // 进入全屏
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(err => {
+          console.error('Error attempting to enable full-screen mode:', err);
+        });
+      } else if ((elem as any).mozRequestFullScreen) {
+        (elem as any).mozRequestFullScreen();
+      } else if ((elem as any).webkitRequestFullscreen) {
+        (elem as any).webkitRequestFullscreen();
+      } else if ((elem as any).msRequestFullscreen) {
+        (elem as any).msRequestFullscreen();
+      }
+    } else {
+      // 退出全屏
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(err => {
+          console.error('Error attempting to exit full-screen mode:', err);
+        });
+      } else if ((document as any).mozCancelFullScreen) {
+        (document as any).mozCancelFullScreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      } else if ((document as any).msExitFullscreen) {
+        (document as any).msExitFullscreen();
+      }
+    }
+  };
+
+  // 监听全屏变化
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      const fullscreenElement = 
+        document.fullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).msFullscreenElement;
+
+      setIsFullScreen(!!fullscreenElement);
+    };
+
+    // 添加事件监听器
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullScreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
+    document.addEventListener('msfullscreenchange', handleFullScreenChange);
+
+    // 清理函数
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
+      document.removeEventListener('msfullscreenchange', handleFullScreenChange);
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col h-full">
+    <div className={`flex flex-col h-full ${isFullScreen ? 'fixed inset-0 z-[1000] bg-background' : ''}`}>
       <div className="flex items-center justify-between border-b p-3 sm:p-4 bg-muted">
-        <h2 className="text-lg sm:text-xl font-semibold truncate">{book.title}</h2>
-        <Button variant="ghost" size="icon" onClick={onClose}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-5 w-5 sm:h-6 sm:w-6"
+        <div className="flex items-center gap-4">
+          <h2 className="text-lg sm:text-xl font-semibold truncate">{book.title}</h2>
+          <span className="text-sm text-muted-foreground">
+            页面 {book.readingMode?.currentPage} / {book.readingMode?.totalPages}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => setShowBookmarks(!showBookmarks)}
+            className={showBookmarks ? "bg-accent" : ""}
           >
-            <path d="M18 6 6 18M6 6l12 12" />
-          </svg>
-        </Button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-5"
+            >
+              <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+            </svg>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => setShowHighlights(!showHighlights)}
+            className={showHighlights ? "bg-accent" : ""}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-5"
+            >
+              <path d="m9 11-6 6v3h9l3-3"/>
+              <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>
+            </svg>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={toggleFullScreen}
+            title={isFullScreen ? "退出全屏" : "进入全屏"}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-5"
+            >
+              {isFullScreen ? (
+                <>
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+                </>
+              ) : (
+                <>
+                  <path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+                </>
+              )}
+            </svg>
+          </Button>
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-5 sm:h-6 sm:w-6"
+            >
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </Button>
+        </div>
       </div>
-      <div className="flex-1 overflow-auto p-4 sm:p-6">
-        <div className="mx-auto max-w-3xl">
-          <div className="flex justify-center mb-6 sm:mb-8">
-            <img 
-              src={`/covers/${book.id}.jpg`} 
-              alt={book.title}
-              className="h-48 sm:h-64 rounded-lg object-cover shadow-lg"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = "/covers/default.jpg";
-              }}
-            />
+      <div className="flex-1 overflow-auto">
+        <div className="flex h-full">
+          {/* 侧边栏 */}
+          <div 
+            className={`
+              absolute top-0 left-0 bottom-0 w-80 border-r bg-muted/30 overflow-y-auto 
+              transition-all duration-300 z-10
+              ${showBookmarks || showHighlights 
+                ? 'translate-x-0 opacity-100' 
+                : '-translate-x-full opacity-0'}
+            `}
+          >
+            <div className="p-4">
+              {showBookmarks && (
+                <div>
+                  <h3 className="font-semibold mb-4">书签</h3>
+                  <div className="space-y-3">
+                    {book.readingMode?.bookmarks?.map((bookmark, index) => (
+                      <div key={index} className="bg-background rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">第 {bookmark.page} 页</span>
+                          <span className="text-xs text-muted-foreground">{formatDate(bookmark.timestamp)}</span>
+                        </div>
+                        {bookmark.note && (
+                          <p className="text-sm text-muted-foreground">{bookmark.note}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {showHighlights && (
+                <div>
+                  <h3 className="font-semibold mb-4">高亮标注</h3>
+                  <div className="space-y-3">
+                    {book.readingMode?.highlights?.map((highlight, index) => (
+                      <div key={index} className="bg-background rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">第 {highlight.page} 页</span>
+                          <span className="text-xs text-muted-foreground">{formatDate(highlight.timestamp)}</span>
+                        </div>
+                        <div className="text-sm p-2 rounded" style={{ backgroundColor: `${highlight.color}20` }}>
+                          {highlight.content}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-center">{book.title}</h1>
-          <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 text-center">{book.description}</p>
-          
-          <div className="prose prose-sm sm:prose-lg max-w-none">
-            <p>这是一个示例阅读器界面。在实际应用中，这里将显示书籍的内容。</p>
-            <p>对于PDF文件，您可以集成PDF.js或其他PDF查看器。</p>
-            <p>对于EPUB文件，您可以使用epub.js等库来渲染内容。</p>
-            <p>目前，您可以通过点击"下载"按钮来下载并在本地阅读此书籍。</p>
+
+          {/* 主要内容区域 */}
+          <div 
+            className={`
+              flex-1 h-full overflow-y-auto transition-all duration-300
+              ${showBookmarks || showHighlights 
+                ? 'ml-80' 
+                : 'ml-0'}
+            `}
+          >
+            <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 h-full overflow-y-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+                {/* 左侧信息栏 */}
+                <div className="lg:col-span-3 space-y-6">
+                  <div className="aspect-[3/4] relative rounded-lg overflow-hidden shadow-lg">
+                    <img 
+                      src={`/covers/${book.id}.jpg`} 
+                      alt={book.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "/covers/default.jpg";
+                      }}
+                    />
+                  </div>
+                  <div className="bg-muted/50 rounded-lg p-4 space-y-3">
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">阅读进度</h3>
+                      <div className="w-full h-2 rounded-full bg-muted overflow-hidden">
+                        <div 
+                          className="h-full rounded-full bg-primary transition-all" 
+                          style={{ width: `${book.progress}%` }}
+                        />
+                      </div>
+                      <p className="text-sm mt-2 text-muted-foreground">
+                        已读 {book.progress}% ({book.readingMode?.currentPage} / {book.readingMode?.totalPages} 页)
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">最近阅读</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDate(book.readingMode?.lastRead || '')}
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground mb-2">阅读统计</h3>
+                      <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
+                        <div>书签：{book.readingMode?.bookmarks?.length || 0}</div>
+                        <div>标注：{book.readingMode?.highlights?.length || 0}</div>
+                      </div>
+                    </div>
+                    {book.directories && book.directories.length > 0 && (
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-sm font-medium text-muted-foreground">书籍目录</h3>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => setIsDirectoryExpanded(!isDirectoryExpanded)}
+                            className="h-6 px-2"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className={`h-4 w-4 transition-transform ${isDirectoryExpanded ? 'rotate-180' : ''}`}
+                            >
+                              <path d="m6 9 6 6 6-6"/>
+                            </svg>
+                          </Button>
+                        </div>
+                        <div 
+                          className={`
+                            overflow-hidden transition-all duration-300 
+                            ${isDirectoryExpanded ? 'max-h-64' : 'max-h-12'}
+                            space-y-1.5 text-xs text-muted-foreground
+                          `}
+                        >
+                          {book.directories?.map((dir, index) => (
+                            <div 
+                              key={index} 
+                              className={`
+                                pl-${dir.startsWith('├─') ? '4' : '0'} 
+                                ${dir.startsWith('└─') ? 'border-l-2 border-primary/30 pl-4' : ''}
+                              `}
+                            >
+                              {dir.replace(/^[├└─\s]+/, '')}
+                            </div>
+                          ))}
+                        </div>
+                        {!isDirectoryExpanded && book.directories && book.directories.length > 5 && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            还有 {book.directories.length - 5} 个目录...
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 右侧内容区 */}
+                <div className="lg:col-span-9 h-full overflow-y-auto pr-2">
+                  <div className="prose prose-sm sm:prose-base lg:prose-lg max-w-none h-full overflow-y-auto">
+                    <h1 className="mb-2">{book.title}</h1>
+                    <p className="text-muted-foreground lead">{book.description}</p>
+                    
+                    {/* 页面内容预览 */}
+                    <div className="not-prose my-6 bg-muted/30 rounded-lg p-6">
+                      <h2 className="text-xl font-semibold mb-4">第 {currentPage} 页内容预览</h2>
+                      <p className="text-base mb-4">
+                        {getCurrentPageContent().text || "暂无页面内容预览"}
+                      </p>
+                      
+                      {getCurrentPageContent().keywords && getCurrentPageContent().keywords.length > 0 && (
+                        <div className="mb-4">
+                          <h3 className="text-lg font-medium mb-2">关键词</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {(getCurrentPageContent().keywords || []).map((keyword, index) => (
+                              <span 
+                                key={index} 
+                                className="px-2 py-1 bg-primary/60 text-primary-foreground rounded-md text-xs font-medium border border-primary/30 shadow-sm hover:bg-primary/25 transition-colors"
+                              >
+                                {keyword}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {getCurrentPageContent().imageDescriptions && getCurrentPageContent().imageDescriptions.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-medium mb-2">图像描述</h3>
+                          <ul className="list-disc list-inside text-muted-foreground">
+                            {(getCurrentPageContent().imageDescriptions || []).map((desc, index) => (
+                              <li key={index} className="text-sm">{desc}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div className="border-t p-3 sm:p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 bg-muted">
         <div className="flex items-center gap-2 justify-center sm:justify-start">
-          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex-1 sm:flex-none"
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -75,7 +436,13 @@ function BookReader({ book, onClose }: { book: Book, onClose: () => void }) {
             </svg>
             上一页
           </Button>
-          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex-1 sm:flex-none"
+            disabled={currentPage === (book.readingMode?.totalPages || 1)}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
             下一页
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +459,9 @@ function BookReader({ book, onClose }: { book: Book, onClose: () => void }) {
           </Button>
         </div>
         <div className="text-center sm:text-left my-1 sm:my-0">
-          <span className="text-sm text-muted-foreground">页面 1 / 10</span>
+          <span className="text-sm text-muted-foreground">
+            页面 {currentPage} / {book.readingMode?.totalPages}
+          </span>
         </div>
         <div className="flex justify-center sm:justify-end w-full sm:w-auto">
           <a 
@@ -111,9 +480,9 @@ function BookReader({ book, onClose }: { book: Book, onClose: () => void }) {
               strokeLinejoin="round"
               className="mr-2 h-4 w-4"
             >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
             下载
           </a>
@@ -125,6 +494,8 @@ function BookReader({ book, onClose }: { book: Book, onClose: () => void }) {
 
 // 自定义BookCard组件，添加阅读按钮
 function EnhancedBookCard({ book, onRead }: { book: Book, onRead: (book: Book) => void }) {
+  const [isDirectoryExpanded, setIsDirectoryExpanded] = useState(false);
+  
   return (
     <div className="rounded-xl border bg-muted/50 p-6">
       <img 
@@ -156,15 +527,43 @@ function EnhancedBookCard({ book, onRead }: { book: Book, onRead: (book: Book) =
       <div className="mt-4 space-y-3 border-t pt-4">
         <div className="flex flex-wrap gap-4 text-sm">
           <div className="flex-1 min-w-[200px]">
-            <h4 className="font-medium mb-2 text-muted-foreground">项目目录</h4>
-            <ul className="space-y-1.5">
-              {book.directories?.map((dir, i) => (
-                <li key={i} className="flex items-center text-muted-foreground">
-                  <span className="mr-2">📁</span>
-                  {dir}
-                </li>
-              ))}
-            </ul>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="font-medium text-muted-foreground">书籍目录</h4>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setIsDirectoryExpanded(!isDirectoryExpanded)}
+                className="h-6 px-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className={`h-4 w-4 transition-transform ${isDirectoryExpanded ? 'rotate-180' : ''}`}
+                >
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </Button>
+            </div>
+            <div className={`overflow-hidden transition-all duration-300 ${isDirectoryExpanded ? 'max-h-48' : 'max-h-12'}`}>
+              <ul className="space-y-1.5">
+                {book.directories?.map((dir, i) => (
+                  <li key={i} className="flex items-center text-muted-foreground">
+                    <span className="mr-2">📁</span>
+                    {dir}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {!isDirectoryExpanded && book.directories && book.directories.length > 2 && (
+              <p className="text-xs text-muted-foreground mt-1">
+                还有 {book.directories.length - 2} 个目录...
+              </p>
+            )}
           </div>
 
           <div className="flex-1 min-w-[200px]">
