@@ -71,6 +71,29 @@ const data = {
       ],
     },
     {
+      title: "内容管理",
+      url: "#",
+      icon: BookOpen,
+      items: [
+        {
+          title: "Blog",
+            url: "/content/blog", 
+        },
+        {
+          title: "文章管理",
+          url: "/content/articles",
+        },
+        {
+          title: "图片管理",
+          url: "/content/images",
+        },
+        {
+          title: "视频管理",
+          url: "/content/videos",
+        },
+      ],
+    },
+    {
       title: "文件管理",
       url: "/files",
       icon: FileText,
@@ -135,6 +158,7 @@ const data = {
         },
       ],
     },
+ 
     {
       title: "Settings",
       url: "#",

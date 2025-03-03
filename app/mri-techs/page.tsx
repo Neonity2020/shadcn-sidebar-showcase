@@ -19,43 +19,106 @@ export default function MRITechniquesPage() {
               {/* T1加权成像 */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-xl font-semibold text-blue-600">T1加权成像</h2>
-                <div className="mt-4 space-y-3">
-                  <div>
+                <div className="mt-4 flex gap-4">
+                  <div className="flex-1">
                     <p className="text-gray-700">▪ 原理：测量纵向磁化恢复</p>
                     <p className="text-gray-700">▪ 特点：解剖结构清晰显示</p>
                     <p className="text-gray-700">▪ 应用：脑组织解剖观察</p>
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <img 
                       src="/project-images/T1WI.jpeg" 
                       alt="T1加权示例"
-                      className="mt-4 rounded-lg w-full h-48 object-cover"
+                      className="rounded-lg w-full aspect-[3/4] object-cover"
                     />
                   </div>
-
                 </div>
               </div>
 
               {/* T2加权成像 */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-xl font-semibold text-blue-600">T2加权成像</h2>
-                <div className="mt-4 space-y-3">
-                  <div>
+                <div className="mt-4 flex gap-4">
+                  <div className="flex-1">
                     <p className="text-gray-700">▪ 原理：检测横向磁化衰减</p>
                     <p className="text-gray-700">▪ 特点：对水肿敏感</p>
                     <p className="text-gray-700">▪ 应用：病理变化检测</p>
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <img 
                       src="/project-images/T2WI.jpeg" 
-                      alt="T1加权示例"
-                      className="mt-4 rounded-lg w-full h-48 object-cover"
+                      alt="T2加权示例"
+                      className="rounded-lg w-full aspect-[3/4] object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* FLAIR加权成像 */}
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-xl font-semibold text-green-600">FLAIR加权成像</h2>
+                <div className="mt-4 flex gap-4">
+                  <div className="flex-1">
+                    <p className="text-gray-700">▪ 原理：抑制脑脊液信号</p>
+                    <p className="text-gray-700">▪ 特点：病变边界清晰</p>
+                    <p className="text-gray-700">▪ 应用：脑白质病变检测</p>
+                  </div>
+                  <div className="flex-1 relative overflow-hidden group">
+                    <img 
+                      src="/project-images/flair-left.jpg" 
+                      alt="FLAIR加权示例"
+                      className="rounded-lg w-full aspect-[3/4] object-cover absolute top-0 left-0 z-10 group-hover:opacity-0 transition-opacity duration-300"
+                    />
+                    <img 
+                      src="/project-images/flair-right.jpg" 
+                      alt="FLAIR加权示例（标注）"
+                      className="rounded-lg w-full aspect-[3/4] object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    />
+                    <p className="text-xs text-center text-gray-600 mt-2">悬停显示图片标注 - 灰白质分界清晰</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* DWI扩散加权成像 */}
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-xl font-semibold text-purple-600">DWI扩散加权成像</h2>
+                <div className="mt-4 flex gap-4">
+                  <div className="flex-1">
+                    <p className="text-gray-700">▪ 原理：测量分子布朗运动</p>
+                    <p className="text-gray-700">▪ 特点：高度敏感于细胞密度</p>
+                    <p className="text-gray-700">▪ 应用：急性脑梗死诊断；肿瘤鉴别诊断</p>
+                  </div>
+                  <div className="flex-1">
+                    <img 
+                      src="/project-images/dwi.jpeg" 
+                      alt="DWI加权示例"
+                      className="rounded-lg w-full aspect-[3/4] object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SWI磁敏感加权成像 */}
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-xl font-semibold text-red-600">SWI磁敏感加权成像</h2>
+                <div className="mt-4 flex gap-4">
+                  <div className="flex-1">
+                    <p className="text-gray-700">▪ 原理：利用磁敏感性差异</p>
+                    <p className="text-gray-700">▪ 特点：静脉血管高对比</p>
+                    <p className="text-gray-700">▪ 应用：微出血、血管畸形</p>
+                  </div>
+                  <div className="flex-1">
+                    <img 
+                      src="/project-images/swi.jpeg" 
+                      alt="SWI加权示例"
+                      className="rounded-lg w-full aspect-[3/4] object-cover"
                     />
                   </div>
                 </div>
               </div>
 
               {/* 更多技术区块... */}
+              
             </div>
 
             {/* 技术对比表格 */}
@@ -78,11 +141,29 @@ export default function MRITechniquesPage() {
                       <td className="py-3 px-4">10-20ms</td>
                       <td className="py-3 px-4">解剖结构</td>
                     </tr>
-                    <tr>
+                    <tr className="border-b">
                       <td className="py-3 px-4">T2WI</td>
                       <td className="py-3 px-4">2000-5000ms</td>
                       <td className="py-3 px-4">80-120ms</td>
                       <td className="py-3 px-4">病理改变</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-3 px-4">FLAIR</td>
+                      <td className="py-3 px-4">8000-10000ms</td>
+                      <td className="py-3 px-4">120-140ms</td>
+                      <td className="py-3 px-4">白质病变</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-3 px-4">DWI</td>
+                      <td className="py-3 px-4">3000-5000ms</td>
+                      <td className="py-3 px-4">60-100ms</td>
+                      <td className="py-3 px-4">细胞密度</td>
+                    </tr>
+                    <tr>
+                      <td className="py-3 px-4">SWI</td>
+                      <td className="py-3 px-4">20-50ms</td>
+                      <td className="py-3 px-4">10-20ms</td>
+                      <td className="py-3 px-4">血管结构</td>
                     </tr>
                   </tbody>
                 </table>

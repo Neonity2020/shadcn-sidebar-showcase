@@ -110,6 +110,10 @@ export default function Home() {
                   <span className="h-2 w-2 rounded-full bg-blue-500 flex-shrink-0"></span>
                   <span>添加多个临床案例分析</span>
                 </li>
+                <li className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors">
+                  <span className="h-2 w-2 rounded-full bg-blue-500 flex-shrink-0"></span>
+                  <span>新增<a href="/mri-dictionary/swi" className="text-blue-600 hover:underline">SWI</a>序列技术详解</span>
+                </li>
               </ul>
             </div>
 
