@@ -50,7 +50,7 @@ export const books: Book[] = [
       "第7章 肿瘤",
       "第8章 代谢性疾病"
     ],
-    downloadUrl: "https://pan.baidu.com/s/1pVmRGWXyES7A589J8z_COg?pwd=45yj",
+    downloadUrl: "https://pan.baidu.com/s/1NBOqkDZaVhCZZJB11G3wjw?pwd=hsmc",
     readingMode: {
       currentPage: 156,
       totalPages: 208,
@@ -238,7 +238,7 @@ export const books: Book[] = [
       "├─ 6. Body MRI",
       "└─ 7. Advanced Applications"
     ],
-    downloadUrl: "https://pan.baidu.com/s/2bVmRGWXyES7A589J8z_COg?pwd=78xj",
+    downloadUrl: "https://pan.baidu.com/s/1FJSHNPSPk3O8brzq_LmzFA?pwd=n8rb",
     readingMode: {
       currentPage: 120,
       totalPages: 200,
@@ -283,7 +283,7 @@ export const books: Book[] = [
       "├─ Case 5: Spinal Cord Tumor",
       "Chapter 4: Advanced Imaging"
     ],
-    downloadUrl: "https://example.com/download/5",
+    downloadUrl: "https://pan.baidu.com/s/1MK5A3qfjiyc2GE_bi5HRkQ?pwd=7n4m",
     readingMode: {
       currentPage: 45,
       totalPages: 300,
@@ -325,7 +325,7 @@ export const books: Book[] = [
       "├─ 3.2 Image Contrast",
       "4. Advanced Techniques"
     ],
-    downloadUrl: "https://pan.baidu.com/s/3cVmRGWXyES7A589J8z_COg?pwd=92km",
+    downloadUrl: "https://pan.baidu.com/s/1GEIiaPN0o4t8Jh8-e7iY2A?pwd=8bcy",
     readingMode: {
       currentPage: 280,
       totalPages: 280,
@@ -420,7 +420,7 @@ export const books: Book[] = [
       "├─ Lower Abdomen",
       "└─ Pelvis"
     ],
-    downloadUrl: "https://pan.baidu.com/s/4dVmRGWXyES7A589J8z_COg?pwd=63hn",
+    downloadUrl: "https://pan.baidu.com/s/1sFvLwGMMSaCwwFhVMOvDxA?pwd=td44",
     readingMode: {
       currentPage: 48,
       totalPages: 480,
@@ -463,7 +463,7 @@ export const books: Book[] = [
       "├─ Chapter 8: Flow Effects",
       "└─ Chapter 9: Diffusion and Perfusion"
     ],
-    downloadUrl: "https://example.com/download/9",
+    downloadUrl: "https://pan.baidu.com/s/1y6lF2Po6_X56QdONrlUAuQ?pwd=suhy",
     readingMode: {
       currentPage: 520,
       totalPages: 650,
