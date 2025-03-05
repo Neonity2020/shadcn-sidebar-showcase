@@ -104,5 +104,39 @@ export const dictionaryData: DictionaryEntry[] = [
         }
       ]
     },
+    {
+      term: '血管母细胞瘤 (Hemangioblastoma, HGBL)',
+      definition: `血管母细胞瘤是一种罕见的中枢神经系统血管性肿瘤，常见于小脑、脊髓和脑干。MRI上具有以下特征：
+
+        1. T1WI：
+           - 肿瘤本身呈等或稍低信号
+           - 周围血管丰富区域可呈高信号
+        
+        2. T2WI：
+           - 肿瘤实质呈高信号
+           - 常见囊实性成分
+           - 周围血管网络清晰可见
+        
+        3. 增强扫描：
+           - 肿瘤实质和血管网络明显强化
+           - 边界清晰
+        
+        4. 典型特征：
+           - 常伴有囊肿和实性成分
+           - 周围可见扩张的血管网络
+           - 多发于小脑和脊髓
+           - 与von Hippel-Lindau综合征相关`,
+      category: '脑肿瘤',
+      relatedReadings: [
+        {
+          title: '血管母细胞瘤MRI诊断特点',
+          url: '/mri-diagnosis/neuroimaging/brain-tumors/hemangioblastoma/'
+        },
+        {
+          title: 'von Hippel-Lindau综合征',
+          url: 'https://ghr.nlm.nih.gov/condition/von-hippel-lindau-syndrome'
+        }
+      ]
+    },
     // 可以添加更多词条
   ]
