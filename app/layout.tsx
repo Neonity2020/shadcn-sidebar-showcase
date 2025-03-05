@@ -14,14 +14,6 @@ export const metadata: Metadata = {
   description: 'My MRI library',
 }
 
-function ClientLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <SidebarProvider>
-      {children}
-    </SidebarProvider>
-  )
-}
-
 export default function RootLayout({
   children,
 }: {
@@ -30,23 +22,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ClientLayout>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <header className="fixed flex h-14 w-full shrink-0 items-center border-b px-4 bg-background">
-                <div className="flex items-center gap-2">
-                  <SidebarTrigger className="-ml-1" />
-                  <Separator orientation="vertical" className="mr-2 h-4" />
-                  <BreadcrumbNav />
-                </div>
-              </header>
-              <div className="pt-16">
-                {children}
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <header className="fixed flex h-14 w-full shrink-0 items-center border-b px-4 bg-background">
+              <div className="flex items-center gap-2">
+                <SidebarTrigger className="-ml-1" />
+                <Separator orientation="vertical" className="mr-2 h-4" />
+                <BreadcrumbNav />
               </div>
-            </SidebarInset>
-          </SidebarProvider>
-        </ClientLayout>
+            </header>
+            <div className="pt-16">
+              {children}
+            </div>
+          </SidebarInset>
+        </SidebarProvider>
       </body>
     </html>
   )

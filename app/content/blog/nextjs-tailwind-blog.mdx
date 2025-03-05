@@ -1,0 +1,130 @@
+## 这是我的第一篇博客 //测试标题
+## 引言
+
+在当今数字时代，拥有一个个人博客或技术博客已经成为开发者展示技能、分享知识的重要方式。
+而构建一个现代化、美观且功能丰富的博客网站，Next.js和Tailwind CSS是一个强大的组合。
+Next.js提供了服务器端渲染、静态生成和API路由等功能，而Tailwind CSS则提供了高度可定制的设计系统。
+
+## 为什么选择Next.js和Tailwind CSS？
+
+Next.js是一个基于React的框架，它提供了许多开箱即用的功能，使得构建现代Web应用变得简单高效：
+
+- 服务器端渲染(SSR)和静态站点生成(SSG)，提升性能和SEO
+- 基于文件系统的路由，简化导航结构
+- API路由，轻松创建后端API
+- 内置图像优化，提升加载速度
+- 增量静态再生成(ISR)，保持内容新鲜
+
+而Tailwind CSS是一个功能类优先的CSS框架，它提供了低级实用工具类，使得创建自定义设计变得简单：
+
+- 无需编写自定义CSS，加速开发过程
+- 高度可定制，适应任何设计需求
+- 响应式设计变得简单直观
+- 暗黑模式支持，提升用户体验
+- 通过PurgeCSS优化生产构建，减小文件大小
+
+## 项目设置
+
+首先，我们需要创建一个新的Next.js项目并安装Tailwind CSS。打开终端并运行以下命令：
+
+```bash
+npx create-next-app@latest my-blog
+cd my-blog
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+接下来，配置Tailwind CSS。编辑`tailwind.config.js`文件：
+
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './app/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+  darkMode: 'class',
+}
+```
+
+## 创建博客布局
+
+一个好的博客需要清晰的布局结构。我们可以创建以下组件：
+
+- Header：包含导航菜单和主题切换
+- Footer：包含版权信息和社交媒体链接
+- Layout：包装所有页面的主布局
+- BlogCard：博客文章预览卡片
+- BlogPost：完整的博客文章页面
+
+## 实现深色模式
+
+Tailwind CSS提供了内置的深色模式支持。我们可以使用`next-themes`库来实现主题切换：
+
+```bash
+npm install next-themes
+```
+
+然后创建一个`ThemeProvider`组件：
+
+```typescript
+// components/ThemeProvider.tsx
+import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { type ThemeProviderProps } from 'next-themes/dist/types'
+
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+}
+```
+
+## 添加MDX支持
+
+MDX是一种强大的格式，它允许在Markdown中使用JSX。这对于创建丰富的博客内容非常有用：
+
+```bash
+npm install @next/mdx @mdx-js/loader @mdx-js/react
+```
+
+配置Next.js以支持MDX文件：
+
+```javascript
+// next.config.mjs
+import { withContentlayer } from 'next-contentlayer'
+import rehypePrism from 'rehype-prism-plus'
+import rehypeSlug from 'rehype-slug'
+import { rehypeShiki } from '@shikijs/rehype'
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  // 添加 MDX 配置
+  webpack: (config, options) => {
+    config.module.rules.push({
+      test: /\.mdx?$/,
+      use: [
+        options.defaultLoaders.babel,
+        {
+          loader: '@mdx-js/loader',
+          options: {
+            rehypePlugins: [
+              rehypeSlug,
+              [rehypeShiki, {
+                theme: 'github-dark'
+              }]
+            ]
+          }
+        }
+      ]
+    })
+    return config
+  }
+}
+
+export default withContentlayer(nextConfig)
+```

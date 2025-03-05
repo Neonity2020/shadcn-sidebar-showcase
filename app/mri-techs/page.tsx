@@ -67,7 +67,7 @@ export default function MRITechniquesPage() {
                     <img 
                       src="/project-images/flair-left.jpg" 
                       alt="FLAIR加权示例"
-                      className="rounded-lg w-full aspect-[3/4] object-cover absolute top-0 left-0 z-10 group-hover:opacity-0 transition-opacity duration-300"
+                      className="rounded-lg w-full aspect-[3/4] object-cover absolute top-0 left-0 z-5 group-hover:opacity-0 transition-opacity duration-300"
                     />
                     <img 
                       src="/project-images/flair-right.jpg" 
