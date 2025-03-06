@@ -105,7 +105,7 @@ export const dictionaryData: DictionaryEntry[] = [
       ]
     },
     {
-      term: '血管母细胞瘤 (Hemangioblastoma, HGBL)',
+      term: 'HGBL (Hemangioblastoma), 血管母细胞瘤',
       definition: `血管母细胞瘤是一种罕见的中枢神经系统血管性肿瘤，常见于小脑、脊髓和脑干。MRI上具有以下特征：
 
         1. T1WI：
@@ -138,5 +138,25 @@ export const dictionaryData: DictionaryEntry[] = [
         }
       ]
     },
-    // 可以添加更多词条
+    {
+      term: 'VHL (Von Hippel-Lindau Syndrome)',
+      definition: `Von Hippel-Lindau综合征是一种遗传性疾病，主要影响中枢神经系统。该综合征的特点包括：
+
+        1. 多发血管母细胞瘤
+        2. 脑膜瘤
+        3. 视网膜血管瘤
+        4. 胰腺囊肿和囊腺瘤
+        5. 肾脏囊肿和肾癌`,
+      category: '脑肿瘤',
+      relatedReadings: [
+        {
+          title: 'Von Hippel-Lindau综合征',
+          url: 'https://ghr.nlm.nih.gov/condition/von-hippel-lindau-syndrome'
+        },
+        {
+          title: 'Von Hippel-Lindau综合征',
+          url: '/content/articles/von-hippel-lindau-syndrome/'
+        }
+      ]
+    }
   ]

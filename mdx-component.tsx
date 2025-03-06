@@ -1,6 +1,7 @@
 import type { MDXComponents as MDXComponentsType } from 'mdx/types'
 import { ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import Image from '@/components/image'
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -98,6 +99,7 @@ const mdxComponents = {
     />
   ),
   MDXComponents: MDXComponents,
+  Image: Image,
 }
 
 export function useMDXComponents(components: MDXComponentsType): MDXComponentsType {
