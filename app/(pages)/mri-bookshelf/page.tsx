@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { books as initialBooks } from "@/data/books";
-import { BookCard } from "@/components/book-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -651,6 +650,23 @@ export default function MRIBookshelfPage() {
     file: null as File | null
   });
 
+  // 检查URL参数并打开对应书籍的阅读器
+  useEffect(() => {
+    // 获取URL中的参数
+    const params = new URLSearchParams(window.location.search);
+    const bookId = params.get('id');
+    
+    if (bookId) {
+      // 查找对应ID的书籍
+      const bookToOpen = books.find(book => book.id.toString() === bookId);
+      if (bookToOpen) {
+        // 打开阅读器
+        setSelectedBook(bookToOpen);
+        setIsReaderOpen(true);
+      }
+    }
+  }, [books]);
+
   // 过滤和搜索书籍
   const filteredBooks = books.filter(book => {
     const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -759,12 +775,22 @@ export default function MRIBookshelfPage() {
 
   // 处理阅读书籍
   const handleReadBook = (book: Book) => {
+    // 更新URL，添加书籍ID参数
+    const url = new URL(window.location.href);
+    url.searchParams.set('id', book.id.toString());
+    window.history.pushState({}, '', url);
+    
     setSelectedBook(book);
     setIsReaderOpen(true);
   };
 
   // 关闭阅读器
   const handleCloseReader = () => {
+    // 移除URL中的书籍ID参数
+    const url = new URL(window.location.href);
+    url.searchParams.delete('id');
+    window.history.pushState({}, '', url);
+    
     setIsReaderOpen(false);
     setSelectedBook(null);
   };

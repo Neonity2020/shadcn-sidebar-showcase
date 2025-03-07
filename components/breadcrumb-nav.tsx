@@ -29,7 +29,7 @@ export function BreadcrumbNav() {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/" className="text-muted-foreground hover:text-foreground">
+          <BreadcrumbLink href="/dashboard" className="text-muted-foreground hover:text-foreground">
             首页
           </BreadcrumbLink>
         </BreadcrumbItem>

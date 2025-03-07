@@ -6,8 +6,8 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "MyApp - 您的应用助手",
-  description: "一个强大的应用程序，帮助您更好地管理工作和生活",
+  title: "MRI-Library - 您的MRI知识管理工具",
+  description: "一个强大的MRI知识管理工具，帮助您更好地管理您的MRI知识",
 }
 
 export default function RootLayout({

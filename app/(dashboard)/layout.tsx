@@ -22,7 +22,7 @@ export default function DashboardLayout({
             {/* 这里可以添加用户头像等组件 */}
           </div>
         </header>
-        <div className="pt-16">
+        <div className="pt-16 px-4">
           {children}
         </div>
       </SidebarInset>
