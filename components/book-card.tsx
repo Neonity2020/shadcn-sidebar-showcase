@@ -8,7 +8,7 @@ export function BookCard({ book }: BookProps) {
   return (
     <div className="rounded-xl border bg-muted/50 p-6">
       <img 
-        src={`/project-images/${book.id}.jpg`} 
+        src={`/covers/${book.id}.jpg`} 
         alt={book.title}
         className="mb-4 aspect-video rounded-lg bg-muted object-cover"
       />

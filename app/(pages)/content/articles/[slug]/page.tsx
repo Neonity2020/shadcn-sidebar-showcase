@@ -16,7 +16,7 @@ interface PageProps {
 
 // 生成静态路径
 export async function generateStaticParams() {
-  const articlesDirectory = path.join(process.cwd(), 'app/content/articles')
+  const articlesDirectory = path.join(process.cwd(), 'app/(pages)/content/articles')
   const filenames = fs.readdirSync(articlesDirectory)
   
   return filenames
@@ -29,7 +29,7 @@ export async function generateStaticParams() {
 // 生成元数据
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const slug = await Promise.resolve(params.slug)
-  const filePath = path.join(process.cwd(), `app/content/articles/${slug}.mdx`)
+  const filePath = path.join(process.cwd(), `app/(pages)/content/articles/${slug}.mdx`)
   
   // 检查文件是否存在
   if (!fs.existsSync(filePath)) {
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // 文章页面组件
 export default async function ArticlePage({ params }: PageProps) {
   const slug = await Promise.resolve(params.slug)
-  const filePath = path.join(process.cwd(), `app/content/articles/${slug}.mdx`)
+  const filePath = path.join(process.cwd(), `app/(pages)/content/articles/${slug}.mdx`)
   
   // 检查文件是否存在
   if (!fs.existsSync(filePath)) {

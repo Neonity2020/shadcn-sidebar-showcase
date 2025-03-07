@@ -14,7 +14,7 @@ interface ArticleMetadata {
 
 // 获取所有文章元数据
 async function getArticlesMetadata(): Promise<ArticleMetadata[]> {
-  const articlesDirectory = path.join(process.cwd(), 'app/content/articles')
+  const articlesDirectory = path.join(process.cwd(), 'app/(pages)/content/articles')
   const filenames = fs.readdirSync(articlesDirectory)
   
   const articlesMetadata = filenames
