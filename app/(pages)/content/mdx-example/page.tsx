@@ -1,10 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { MDXComponents } from '@/mdx-component'
+import { MDXComponents } from '@/components/mdx-component'
 
 export default async function MDXExamplePage() {
-  const filePath = path.join(process.cwd(), 'app/content/mdx-example.mdx')
+  const filePath = path.join(process.cwd(), 'app/(pages)/content/mdx-example.mdx')
   const source = fs.readFileSync(filePath, 'utf8')
 
   return (

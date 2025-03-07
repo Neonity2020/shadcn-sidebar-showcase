@@ -1,4 +1,4 @@
-import { MDXComponents } from '@/mdx-component'
+import { MDXComponents } from '@/components/mdx-component'
 
 export default function MDXPage() {
   return (

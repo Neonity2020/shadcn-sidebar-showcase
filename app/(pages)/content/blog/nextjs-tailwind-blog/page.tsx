@@ -1,11 +1,11 @@
 import { BlogPost } from "@/components/blog-post"
-import { useMDXComponents } from "@/mdx-component"
+import { useMDXComponents } from "@/components/mdx-component"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import { readFile } from "fs/promises"
 import path from "path"
 
 export default async function BlogPostPage() {
-  const filePath = path.join(process.cwd(), "app/content/blog/nextjs-tailwind-blog.mdx")
+  const filePath = path.join(process.cwd(), "app/(pages)/content/blog/nextjs-tailwind-blog.mdx")
   const source = await readFile(filePath, "utf8")
 
   return (
