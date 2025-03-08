@@ -92,3 +92,40 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* 自定义动画关键帧 */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 卡片悬停效果 */
+.card-hover-effect {
+  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+/* 文本渐变效果 */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-chart-1 via-chart-2 to-chart-4;
+  background-size: 200% auto;
+  animation: textGradient 4s ease infinite;
+}
+
+@keyframes textGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

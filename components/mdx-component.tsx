@@ -1,189 +1,224 @@
-import type { MDXComponents as MDXComponentsType } from 'mdx/types'
-import { ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-import Image from '@/components/image'
+"use client"
 
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+import React, { useEffect, useState, useRef } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import type { MDXComponents as MDXComponentsType } from 'mdx/types'
 
 // 生成一致的ID
 function generateId(text: string): string {
   return text
     .toLowerCase()
     .replace(/\s+/g, '-')
-    .replace(/[^\w\-]+/g, '')
+    .replace(/[^\w\-\u4e00-\u9fa5]+/g, '') // 保留中文字符（Unicode范围：\u4e00-\u9fa5）
     .replace(/[\(\)]/g, ''); // 移除括号
 }
 
-// 自定义 MDX 组件
-export const MDXComponents = () => (
-  <div className="rounded-md bg-slate-100 p-4 dark:bg-slate-800">
-    <p className="font-bold">这是一个自定义的React组件</p>
-    <p>它可以在MDX文件中使用</p>
-  </div>
-)
-
-const mdxComponents = {
-  h1: ({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
-    const text = String(children || '');
-    const id = generateId(text);
-    
-    return (
-      <h1
-        id={id}
-        className={cn(
-          "group flex items-center mt-2 scroll-m-20 text-4xl font-bold tracking-tight",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        <a
-          href={`#${id}`}
-          className="ml-2 opacity-0 group-hover:opacity-100 text-blue-500 transition-opacity"
-          aria-label={`链接到 ${text}`}
-        >
-          #
-        </a>
-      </h1>
-    );
-  },
-  h2: ({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
-    const text = String(children || '');
-    const id = generateId(text);
-    
-    return (
-      <h2
-        id={id}
-        className={cn(
-          "group flex items-center mt-12 scroll-m-20 pb-2 text-2xl font-semibold tracking-tight first:mt-0",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        <a
-          href={`#${id}`}
-          className="ml-2 opacity-0 group-hover:opacity-100 text-blue-500 transition-opacity"
-          aria-label={`链接到 ${text}`}
-        >
-          #
-        </a>
-      </h2>
-    );
-  },
-  h3: ({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
-    const text = String(children || '');
-    const id = generateId(text);
-    
-    return (
-      <h3
-        id={id}
-        className={cn(
-          "group flex items-center mt-8 scroll-m-20 text-xl font-semibold tracking-tight",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        <a
-          href={`#${id}`}
-          className="ml-2 opacity-0 group-hover:opacity-100 text-blue-500 transition-opacity"
-          aria-label={`链接到 ${text}`}
-        >
-          #
-        </a>
-      </h3>
-    );
-  },
-  h4: ({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
-    const text = String(children || '');
-    const id = generateId(text);
-    
-    return (
-      <h4
-        id={id}
-        className={cn(
-          "group flex items-center mt-6 scroll-m-20 text-lg font-semibold tracking-tight",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        <a
-          href={`#${id}`}
-          className="ml-2 opacity-0 group-hover:opacity-100 text-blue-500 transition-opacity"
-          aria-label={`链接到 ${text}`}
-        >
-          #
-        </a>
-      </h4>
-    );
-  },
-  p: ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p
-      className={cn("leading-7 [&:not(:first-child)]:mt-6", className)}
-      {...props}
-    />
-  ),
-  ul: ({ className, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
-    <ul className={cn("my-6 ml-6 list-disc", className)} {...props} />
-  ),
-  ol: ({ className, ...props }: React.HTMLAttributes<HTMLOListElement>) => (
-    <ol className={cn("my-6 ml-6 list-decimal", className)} {...props} />
-  ),
-  li: ({ className, ...props }: React.HTMLAttributes<HTMLLIElement>) => (
-    <li className={cn("mt-2", className)} {...props} />
-  ),
-  a: ({ className, ...props }: React.HTMLAttributes<HTMLAnchorElement>) => (
-    <a
-      className={cn("font-medium underline underline-offset-4", className)}
-      {...props}
-    />
-  ),
-  blockquote: ({ className, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
-    <blockquote
-      className={cn(
-        "mt-6 border-l-2 pl-6 italic [&>*]:text-muted-foreground",
-        className
-      )}
-      {...props}
-    />
-  ),
-  img: ({
-    className,
-    alt,
-    ...props
-  }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img className={cn("rounded-md border", className)} alt={alt} {...props} />
-  ),
-  code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
-    <code
-      className={cn(
-        "relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm",
-        className
-      )}
-      {...props}
-    />
-  ),
-  pre: ({ className, ...props }: React.HTMLAttributes<HTMLPreElement>) => (
-    <pre
-      className={cn(
-        "mb-4 mt-6 overflow-x-auto rounded-lg border bg-black py-4",
-        className
-      )}
-      {...props}
-    />
-  ),
-  MDXComponents,
-  Image,
+// 定义标题项的接口
+interface Heading {
+  level: number;
+  text: string;
+  id: string;
 }
 
+// 目录组件
+const TableOfContents = ({ headings }: { headings: Heading[] }) => {
+  const [activeId, setActiveId] = useState<string>('');
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const headingRefs = useRef<Map<string, HTMLElement>>(new Map());
+
+  useEffect(() => {
+    // 初始化 IntersectionObserver
+    const callback = (entries: IntersectionObserverEntry[]) => {
+      // 找到当前可见的标题
+      const visibleHeadings = entries.filter(entry => entry.isIntersecting);
+      
+      if (visibleHeadings.length > 0) {
+        // 如果有多个可见标题，选择第一个
+        const visibleId = visibleHeadings[0].target.id;
+        setActiveId(visibleId);
+      }
+    };
+
+    observerRef.current = new IntersectionObserver(callback, {
+      rootMargin: '-80px 0px -40% 0px', // 调整观察区域
+      threshold: 0.1 // 当标题元素10%可见时触发
+    });
+
+    // 观察所有标题元素
+    document.querySelectorAll('h2, h3, h4').forEach(heading => {
+      if (heading.id) {
+        headingRefs.current.set(heading.id, heading as HTMLElement);
+        observerRef.current?.observe(heading);
+      }
+    });
+
+    return () => {
+      // 清理观察器
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  // 处理点击目录项
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      // 平滑滚动到目标元素
+      window.scrollTo({
+        top: element.offsetTop - 80, // 考虑固定导航栏的高度
+        behavior: 'smooth'
+      });
+      
+      // 更新活动ID
+      setActiveId(id);
+    }
+  };
+
+  if (headings.length === 0) return null;
+
+  return (
+    <nav className="toc text-sm">
+      <ul className="space-y-2">
+        {headings.map((heading, index) => (
+          <li 
+            key={index} 
+            className={`
+              ${heading.level === 2 ? 'font-medium' : 'text-gray-600 dark:text-gray-400'} 
+              ${heading.level === 3 ? 'ml-3' : ''}
+              ${heading.level === 4 ? 'ml-6' : ''}
+              transition-colors
+            `}
+          >
+            <a 
+              href={`#${heading.id}`} 
+              onClick={(e) => handleClick(e, heading.id)}
+              className={`
+                block py-1 border-l-2 pl-2 toc-item
+                ${activeId === heading.id 
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400 font-medium' 
+                  : 'border-transparent hover:border-blue-300 hover:text-blue-500 dark:hover:text-blue-300'}
+              `}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
+
+// 简化版的提取标题函数，避免类型问题
+function extractHeadings(content: string): Heading[] {
+  const headingRegex = /^(#{1,4})\s+(.+)$/gm;
+  const headings: Heading[] = [];
+  let match;
+
+  while ((match = headingRegex.exec(content)) !== null) {
+    const level = match[1].length; // 获取#的数量，表示标题级别
+    const text = match[2].trim();
+    const id = generateId(text);
+
+    // 只包含 h2, h3, h4 标题
+    if (level >= 2 && level <= 4) {
+      headings.push({ level, text, id });
+    }
+  }
+
+  return headings;
+}
+
+// 悬浮目录组件
+export const FloatingTableOfContents = () => {
+  const [headings, setHeadings] = useState<Heading[]>([]);
+  
+  useEffect(() => {
+    // 从DOM中提取标题
+    const headingElements = document.querySelectorAll('h2, h3, h4');
+    const extractedHeadings: Heading[] = [];
+    
+    headingElements.forEach((element) => {
+      const level = parseInt(element.tagName.charAt(1), 10);
+      const text = element.textContent || '';
+      const id = element.id || generateId(text);
+      
+      // 确保标题元素有ID
+      if (!element.id) {
+        element.id = id;
+      }
+      
+      extractedHeadings.push({ level, text, id });
+    });
+    
+    setHeadings(extractedHeadings);
+  }, []);
+  
+  if (headings.length === 0) return null;
+  
+  return (
+    <div className="sticky top-24 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm">
+      <h2 className="text-xl font-bold mb-4">目录</h2>
+      <TableOfContents headings={headings} />
+    </div>
+  );
+};
+
+// 自定义MDX组件
+export const MDXComponents: MDXComponentsType = {
+  h1: (props: any) => {
+    const id = generateId(String(props.children));
+    return <h1 id={id} className="text-3xl font-bold mt-8 mb-4" {...props} />;
+  },
+  h2: (props: any) => {
+    const id = generateId(String(props.children));
+    return <h2 id={id} className="text-2xl font-bold mt-6 mb-3" {...props} />;
+  },
+  h3: (props: any) => {
+    const id = generateId(String(props.children));
+    return <h3 id={id} className="text-xl font-semibold mt-5 mb-2" {...props} />;
+  },
+  h4: (props: any) => {
+    const id = generateId(String(props.children));
+    return <h4 id={id} className="text-lg font-medium mt-4 mb-2" {...props} />;
+  },
+  a: (props: any) => <Link href={props.href || '#'} className="text-blue-600 hover:underline" {...props} />,
+  img: (props: any) => (
+    <div className="my-6">
+      <Image 
+        src={props.src || ''} 
+        alt={props.alt || ''} 
+        width={800} 
+        height={500} 
+        className="rounded-lg"
+      />
+    </div>
+  ),
+  pre: (props: any) => (
+    <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto" {...props} />
+  ),
+  code: (props: any) => (
+    <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm" {...props} />
+  ),
+  table: (props: any) => (
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700" {...props} />
+    </div>
+  ),
+  blockquote: (props: any) => (
+    <blockquote className="border-l-4 border-blue-500 pl-4 italic" {...props} />
+  ),
+};
+
+// 用于合并自定义组件的函数
 export function useMDXComponents(components: MDXComponentsType): MDXComponentsType {
   return {
+    ...MDXComponents,
     ...components,
-    ...mdxComponents,
-  }
+  };
 }
+
+export default MDXComponents;

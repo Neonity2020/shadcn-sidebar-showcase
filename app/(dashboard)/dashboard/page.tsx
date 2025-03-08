@@ -47,7 +47,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="mb-4">在这里您可以管理您的所有内容和设置。</p>
-            <Button variant="outline" onClick={() => signOut({ callbackUrl: "/" })}>
+            <Button variant="outline" onClick={() => signOut({ callbackUrl: window.location.origin })}>
               退出登录
             </Button>
           </CardContent>
