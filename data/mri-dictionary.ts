@@ -42,8 +42,36 @@ export const dictionaryData: DictionaryEntry[] = [
     },
     {
       term: 'DWI',
-      definition: '扩散加权成像，用于检测水分子扩散运动的受限程度。',
-      category: '扫描序列'
+      definition: `扩散加权成像(Diffusion Weighted Imaging)，是一种基于水分子布朗运动原理的MRI成像技术。其基本原理如下：
+
+        1. 物理基础：利用水分子随机热运动（布朗运动）的特性
+        2. 成像原理：
+           - 通过施加特定的扩散敏感梯度场
+           - 当水分子自由扩散时，信号衰减明显
+           - 当水分子扩散受限时，信号衰减减少
+        3. 临床应用：
+           - 急性脑梗死早期诊断（细胞毒性水肿导致水分子扩散受限）
+           - 脑肿瘤鉴别诊断
+           - 脑脓肿与肿瘤的鉴别
+           - 多发性硬化等脱髓鞘疾病的评估
+        4. 图像特点：
+           - 扩散受限区域呈高信号
+           - 常与ADC图结合使用进行诊断`,
+      category: '扫描序列',
+      relatedReadings: [
+        {
+          title: 'DWI成像原理详解',
+          url: 'content/articles/principles-of-DWI'
+        },
+        {
+          title: 'DWI在急性脑梗死中的应用',
+          url: 'content/articles/dwi-stroke'
+        },
+        {
+          title: '扩散加权成像的临床应用',
+          url: 'content/articles/dwi-applications'
+        }
+      ]
     },
     {
       term: 'FSBB (Flow Sensitive Black Blood)',
