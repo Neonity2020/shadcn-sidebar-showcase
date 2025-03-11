@@ -231,7 +231,7 @@ export default function MRITechniquesPage() {
                   </div>
                   <div className="space-y-4">
                     <img 
-                      src="/project-images/se-diagram.jpeg" 
+                      src="/project-images/SE-diagram.jpg" 
                       alt="SE序列示意图"
                       className="rounded-lg w-full object-cover shadow-sm"
                     />
@@ -277,7 +277,7 @@ export default function MRITechniquesPage() {
                   </div>
                   <div className="space-y-4">
                     <img 
-                      src="/project-images/gre-diagram.jpeg" 
+                      src="/project-images/GRE-diagram.jpg" 
                       alt="GRE序列示意图"
                       className="rounded-lg w-full object-cover shadow-sm"
                     />
@@ -323,7 +323,7 @@ export default function MRITechniquesPage() {
                   </div>
                   <div className="space-y-4">
                     <img 
-                      src="/project-images/epi-diagram.jpeg" 
+                      src="/project-images/EPI-diagram.jpg" 
                       alt="EPI序列示意图"
                       className="rounded-lg w-full object-cover shadow-sm"
                     />

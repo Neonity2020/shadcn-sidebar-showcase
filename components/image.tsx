@@ -226,11 +226,11 @@ const Image = ({
 
       {isZoomed && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/80 p-4 overflow-auto"
           onClick={handleCloseZoom}
         >
           <button 
-            className="absolute right-4 top-4 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+            className="fixed right-4 top-4 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 z-[60]"
             onClick={(e) => {
               e.stopPropagation()
               handleCloseZoom()
@@ -239,13 +239,13 @@ const Image = ({
             <X className="h-6 w-6" />
           </button>
           <div 
-            className="relative max-h-[90vh] max-w-[90vw] overflow-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="relative mt-12 max-w-[90vw] overflow-auto"
+            onClick={handleCloseZoom}
           >
             <NextImage
               {...props}
               alt={alt}
-              className="h-auto w-auto max-h-[90vh] max-w-[90vw] object-contain"
+              className="h-auto w-auto max-w-[90vw] object-contain"
               sizes="90vw"
               quality={90}
             />

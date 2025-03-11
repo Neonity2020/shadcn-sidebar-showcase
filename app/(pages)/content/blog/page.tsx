@@ -1,74 +1,317 @@
-import { BlogList } from "@/components/blog-list"
+import fs from 'fs'
+import path from 'path'
+import Link from 'next/link'
+import matter from 'gray-matter'
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
-// 模拟博客文章数据
-const posts = [
-  {
-    title: "使用Next.js和Tailwind CSS构建现代博客",
-    description: "本文将介绍如何使用Next.js和Tailwind CSS构建一个现代化的博客网站，包括响应式设计、深色模式支持和SEO优化。",
-    date: "2023-10-15",
-    readingTime: "8分钟阅读",
-    slug: "/content/blog/nextjs-tailwind-blog",
-    tags: ["Next.js", "Tailwind CSS", "React", "前端开发"],
-    coverImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop"
-  },
-  {
-    title: "React Server Components详解",
-    description: "深入了解React Server Components的工作原理、优势以及如何在Next.js应用中有效使用它们来提升性能。",
-    date: "2023-11-05",
-    readingTime: "12分钟阅读",
-    slug: "/content/blog/react-server-components",
-    tags: ["React", "Server Components", "Next.js", "性能优化"],
-    coverImage: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop"
-  },
-  {
-    title: "使用Shadcn UI构建美观的用户界面",
-    description: "探索如何使用Shadcn UI组件库快速构建美观、一致且可访问的用户界面，提高开发效率。",
-    date: "2023-12-10",
-    readingTime: "10分钟阅读",
-    slug: "/content/blog/shadcn-ui-guide",
-    tags: ["UI设计", "Shadcn UI", "组件库", "Tailwind CSS"],
-    coverImage: "https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop"
-  },
-  {
-    title: "TypeScript高级类型技巧",
-    description: "掌握TypeScript高级类型系统，包括条件类型、映射类型、类型推断和实用工具类型的使用方法。",
-    date: "2024-01-20",
-    readingTime: "15分钟阅读",
-    slug: "/content/blog/typescript-advanced-types",
-    tags: ["TypeScript", "类型系统", "前端开发"],
-    coverImage: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=80&w=2074&auto=format&fit=crop"
-  },
-  {
-    title: "现代CSS布局技术",
-    description: "探索现代CSS布局技术，包括Flexbox、Grid、容器查询和CSS变量，以创建灵活且响应式的网页布局。",
-    date: "2024-02-15",
-    readingTime: "9分钟阅读",
-    slug: "/content/blog/modern-css-layout",
-    tags: ["CSS", "Web设计", "响应式设计", "Flexbox", "Grid"],
-    coverImage: "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?q=80&w=2070&auto=format&fit=crop"
-  },
-  {
-    title: "Next.js 14新特性解析",
-    description: "深入了解Next.js 14的新特性和改进，包括服务器操作、部分预渲染和改进的开发体验。",
-    date: "2024-03-05",
-    readingTime: "11分钟阅读",
-    slug: "/content/blog/nextjs-14-features",
-    tags: ["Next.js", "Web开发", "前端框架"],
-    coverImage: "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?q=80&w=2070&auto=format&fit=crop"
+export const metadata: Metadata = {
+  title: '技术博客',
+  description: '浏览所有关于NextJS建站和前端开发的技术文章',
+}
+
+// 获取文章元数据
+function getBlogs() {
+  const blogsDirectory = path.join(process.cwd(), 'app/(pages)/content/blog')
+  const filenames = fs.readdirSync(blogsDirectory)
+  
+  const articles = filenames
+    .filter(filename => filename.endsWith('.mdx'))
+    .map(filename => {
+      const filePath = path.join(blogsDirectory, filename)
+      const fileContent = fs.readFileSync(filePath, 'utf8')
+      const { data } = matter(fileContent)
+      
+      return {
+        slug: filename.replace(/\.mdx$/, ''),
+        title: data.title || '无标题',
+        description: data.description || '',
+        date: data.date || '',
+        author: data.author || '',
+        category: data.category || '',
+        tags: data.tags || [],
+      }
+    })
+    .sort((a, b) => {
+      if (a.date && b.date) {
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      }
+      return 0
+    })
+  
+  return articles
+}
+
+// 获取所有标签
+function getAllTags(articles: any[]): string[] {
+  const tagsSet = new Set<string>()
+  
+  articles.forEach(article => {
+    if (article.tags && Array.isArray(article.tags)) {
+      article.tags.forEach((tag: string) => tagsSet.add(tag))
+    }
+  })
+  
+  return Array.from(tagsSet).sort()
+}
+
+export default function ArticlesPage({
+  searchParams,
+}: {
+  searchParams: { tag?: string; page?: string }
+}) {
+  const allBlogs = getBlogs()
+  const allTags = getAllTags(allBlogs)
+  
+  // 处理标签过滤
+  const selectedTag = searchParams.tag || ''
+  const filteredBlogs = selectedTag 
+    ? allBlogs.filter(blog => 
+        blog.tags && blog.tags.includes(selectedTag)
+      )
+    : allBlogs
+  
+  // 处理分页
+  const currentPage = parseInt(searchParams.page || '1', 10)
+  const blogsPerPage = 9
+  const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage)
+  
+  // 验证页码是否有效
+  if (currentPage < 1 || (currentPage > totalPages && totalPages > 0)) {
+    notFound()
   }
-]
-
-export default function BlogPage() {
+  
+  // 获取当前页的文章
+  const startIndex = (currentPage - 1) * blogsPerPage
+  const endIndex = startIndex + blogsPerPage
+  const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex)
+  
+  // 生成分页链接
+  const generatePageLink = (pageNum: number, tag?: string) => {
+    const params = new URLSearchParams()
+    if (pageNum > 1) params.set('page', pageNum.toString())
+    if (tag) params.set('tag', tag)
+    
+    const queryString = params.toString()
+    return queryString ? `?${queryString}` : ''
+  }
+  
   return (
-    <div className="space-y-10 pb-20">
-      <div className="container mx-auto pt-16 text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">博客文章</h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-          探索我们的技术文章、教程和见解，帮助您提升开发技能和知识
-        </p>
+    <div className="container mx-auto py-6 px-2 sm:px-4">
+      <div className="max-w-4xl mx-auto mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900 dark:text-white">技术博客</h1>
+        <p className="text-gray-600 dark:text-gray-300 text-lg">探索NextJS、React和现代前端开发的最佳实践和技巧</p>
       </div>
       
-      <BlogList posts={posts} />
+      {/* 标签过滤器 */}
+      <div className="mb-6 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
+        <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">按标签筛选</h2>
+        <div className="flex flex-wrap gap-1.5">
+          <Link 
+            href="/content/blog"
+            className={`px-2.5 py-1 rounded-full text-sm font-medium transition-all ${
+              !selectedTag 
+                ? 'bg-blue-600 text-white shadow-sm' 
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600'
+            }`}
+          >
+            全部
+          </Link>
+          
+          {allTags.map(tag => (
+            <Link 
+              key={tag} 
+              href={`/content/blog?tag=${encodeURIComponent(tag)}`}
+              className={`px-2.5 py-1 rounded-full text-sm font-medium transition-all ${
+                selectedTag === tag 
+                  ? 'bg-blue-600 text-white shadow-sm' 
+                  : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600'
+              }`}
+            >
+              {tag}
+            </Link>
+          ))}
+        </div>
+      </div>
+      
+      {/* 文章列表 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {paginatedBlogs.map(blog => (
+          <Link 
+            key={blog.slug} 
+            href={`/content/blog/${blog.slug}`}
+            className="block group h-full"
+          >
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300 h-full flex flex-col transform hover:-translate-y-1">
+              <div className="p-4 flex-grow flex flex-col">
+                <div className="flex items-center mb-3">
+                  {blog.category && (
+                    <span className="px-2.5 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs font-medium rounded-full">
+                      {blog.category}
+                    </span>
+                  )}
+                  {blog.date && (
+                    <span className="text-gray-500 dark:text-gray-400 text-xs ml-auto">
+                      {new Date(blog.date).toLocaleDateString('zh-CN', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </span>
+                  )}
+                </div>
+                
+                <h2 className="text-lg font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                  {blog.title}
+                </h2>
+                
+                {blog.description && (
+                  <p className="text-gray-600 dark:text-gray-300 mb-3 line-clamp-3 flex-grow text-sm">
+                    {blog.description}
+                  </p>
+                )}
+                
+                <div className="flex items-center mt-auto pt-3 border-t border-gray-100 dark:border-gray-700">
+                  {blog.author && (
+                    <div className="flex items-center">
+                      <div className="w-5 h-5 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs text-gray-600 dark:text-gray-300 mr-1.5">
+                        {blog.author.charAt(0)}
+                      </div>
+                      <span className="text-xs text-gray-600 dark:text-gray-300">
+                        {blog.author}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <span className="ml-auto text-blue-600 dark:text-blue-400 text-xs font-medium group-hover:underline flex items-center">
+                    阅读更多
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              
+              {blog.tags && blog.tags.length > 0 && (
+                <div className="px-4 pb-3">
+                  <div className="flex flex-wrap gap-1.5">
+                    {blog.tags.slice(0, 3).map((tag: string, index: number) => (
+                      <span 
+                        key={`${tag}-${index}`} 
+                        className="px-1.5 py-0.5 bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 rounded-md text-xs"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                    {blog.tags.length > 3 && (
+                      <span className="px-1.5 py-0.5 bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 rounded-md text-xs">
+                        +{blog.tags.length - 3}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </Link>
+        ))}
+      </div>
+      
+      {filteredBlogs.length === 0 && (
+        <div className="text-center py-8">
+          <p className="text-xl text-gray-500 dark:text-gray-400">
+            {selectedTag ? `没有找到标签为"${selectedTag}"的文章` : '暂无文章'}
+          </p>
+        </div>
+      )}
+      
+      {/* 分页控件 */}
+      {totalPages > 1 && (
+        <div className="mt-10 flex justify-center">
+          <nav className="flex items-center space-x-1.5">
+            {/* 上一页按钮 */}
+            <Link
+              href={generatePageLink(currentPage - 1, selectedTag)}
+              className={`px-3 py-1.5 rounded-md border ${
+                currentPage === 1
+                  ? 'bg-gray-50 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-500 dark:border-gray-700'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors'
+              }`}
+              aria-disabled={currentPage === 1}
+              tabIndex={currentPage === 1 ? -1 : undefined}
+              onClick={e => currentPage === 1 && e.preventDefault()}
+            >
+              <span className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                上一页
+              </span>
+            </Link>
+            
+            {/* 页码按钮 */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+              // 显示当前页、第一页、最后一页，以及当前页附近的页码
+              if (
+                page === 1 ||
+                page === totalPages ||
+                (page >= currentPage - 1 && page <= currentPage + 1)
+              ) {
+                return (
+                  <Link
+                    key={page}
+                    href={generatePageLink(page, selectedTag)}
+                    className={`px-3 py-1.5 rounded-md border ${
+                      currentPage === page
+                        ? 'bg-blue-600 text-white border-blue-600 dark:bg-blue-700 dark:border-blue-700'
+                        : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700'
+                    }`}
+                    aria-current={currentPage === page ? 'page' : undefined}
+                  >
+                    {page}
+                  </Link>
+                )
+              }
+              
+              // 显示省略号
+              if (
+                (page === 2 && currentPage > 3) ||
+                (page === totalPages - 1 && currentPage < totalPages - 2)
+              ) {
+                return (
+                  <span
+                    key={page}
+                    className="px-3 py-1.5 text-gray-500 dark:text-gray-400"
+                  >
+                    ...
+                  </span>
+                )
+              }
+              
+              return null
+            })}
+            
+            {/* 下一页按钮 */}
+            <Link
+              href={generatePageLink(currentPage + 1, selectedTag)}
+              className={`px-3 py-1.5 rounded-md border ${
+                currentPage === totalPages
+                  ? 'bg-gray-50 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-500 dark:border-gray-700'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors'
+              }`}
+              aria-disabled={currentPage === totalPages}
+              tabIndex={currentPage === totalPages ? -1 : undefined}
+              onClick={e => currentPage === totalPages && e.preventDefault()}
+            >
+              <span className="flex items-center">
+                下一页
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </Link>
+          </nav>
+        </div>
+      )}
     </div>
   )
-} 
+}

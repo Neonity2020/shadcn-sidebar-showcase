@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 import { dictionaryData } from '@/data/mri-dictionary'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 export default function MRIDictionaryPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -62,7 +64,14 @@ export default function MRIDictionaryPage() {
                 <Card key={index} className="p-6 bg-white shadow-md hover:shadow-lg transition-shadow flex flex-col sm:flex-row items-stretch">
                   <div className="flex-grow pr-0 sm:pr-4">
                     <h2 className="text-xl font-semibold mb-3 text-blue-600">{entry.term}</h2>
-                    <p className="text-gray-600 mb-4 leading-relaxed">{entry.definition}</p>
+                    <div className="prose prose-blue max-w-none mb-4 text-gray-600 leading-relaxed">
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]}
+                        disallowedElements={['code', 'pre']}
+                      >
+                        {entry.definition}
+                      </ReactMarkdown>
+                    </div>
                     <span className="inline-block bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
                       {entry.category}
                     </span>

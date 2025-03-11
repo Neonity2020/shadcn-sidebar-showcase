@@ -1,0 +1,516 @@
+---
+title: 'NextJS中的React基础知识'
+description: '本文将介绍在NextJS框架中使用React的基础知识，包括组件、状态管理、钩子函数以及NextJS特有的功能。'
+date: '2023-10-15'
+lastmod: '2024-05-15'
+tags: ['Next.js', 'React', '前端开发', 'JavaScript']
+draft: false
+category: 'Web开发'
+authors: ['default']
+---
+
+## NextJS中的React基础知识
+
+## 引言
+
+React是一个用于构建用户界面的JavaScript库，而Next.js则是基于React的强大框架，它扩展了React的功能并提供了额外的特性。在使用Next.js之前，掌握React的基础知识至关重要。本文将介绍在Next.js环境中使用React的核心概念和最佳实践。
+
+## React组件基础
+
+### 函数组件
+
+在Next.js中，函数组件是最常用的组件类型：
+
+```jsx
+// app/components/Greeting.jsx
+export default function Greeting({ name }) {
+  return <h1>你好，{name}！</h1>;
+}
+```
+
+### 使用组件
+
+在Next.js页面中使用组件：
+
+```jsx
+// app/page.jsx
+import Greeting from '../components/Greeting';
+
+export default function HomePage() {
+  return (
+    <div>
+      <Greeting name="访客" />
+    </div>
+  );
+}
+```
+
+## React状态管理
+
+### useState钩子
+
+在客户端组件中管理状态：
+
+```jsx
+'use client'; // 标记为客户端组件
+
+import { useState } from 'react';
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <p>当前计数: {count}</p>
+      <button onClick={() => setCount(count + 1)}>增加</button>
+    </div>
+  );
+}
+```
+
+### useEffect钩子
+
+处理副作用：
+
+```jsx
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export default function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    async function fetchUser() {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/users/${userId}`);
+        const data = await response.json();
+        setUser(data);
+      } catch (error) {
+        console.error('获取用户数据失败', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchUser();
+  }, [userId]); // 依赖项数组
+  
+  if (loading) return <p>加载中...</p>;
+  if (!user) return <p>未找到用户</p>;
+  
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+    </div>
+  );
+}
+```
+
+## Next.js中的React特性
+
+### 服务器组件与客户端组件
+
+Next.js引入了React Server Components，默认情况下所有组件都是服务器组件：
+
+```jsx
+// 服务器组件（默认）
+export default async function ServerComponent() {
+  const data = await fetchDataOnServer();
+  
+  return <div>{data.map(item => <p key={item.id}>{item.name}</p>)}</div>;
+}
+```
+
+需要使用浏览器API或React状态的组件必须标记为客户端组件：
+
+```jsx
+'use client'; // 必须放在文件顶部
+
+import { useState } from 'react';
+
+export default function ClientComponent() {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <button onClick={() => setIsOpen(!isOpen)}>
+      {isOpen ? '关闭' : '打开'}
+    </button>
+  );
+}
+```
+
+### 组件之间的交互
+
+服务器组件可以导入和渲染客户端组件，但客户端组件不能导入服务器组件：
+
+```jsx
+// ServerWrapper.jsx (服务器组件)
+import ClientCounter from './ClientCounter';
+
+export default function ServerWrapper() {
+  return (
+    <div>
+      <h1>这是服务器渲染的</h1>
+      <ClientCounter /> {/* 可以在服务器组件中使用客户端组件 */}
+    </div>
+  );
+}
+```
+
+## React Props和数据传递
+
+### Props基础
+
+```jsx
+// Button.jsx
+export default function Button({ text, onClick, color = 'blue' }) {
+  return (
+    <button 
+      onClick={onClick}
+      style={{ backgroundColor: color }}
+    >
+      {text}
+    </button>
+  );
+}
+```
+
+### 使用children属性
+
+```jsx
+// Card.jsx
+export default function Card({ children, title }) {
+  return (
+    <div className="card">
+      <h2>{title}</h2>
+      <div className="card-content">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// 使用Card组件
+function HomePage() {
+  return (
+    <Card title="欢迎">
+      <p>这是卡片内容</p>
+      <button>点击我</button>
+    </Card>
+  );
+}
+```
+
+## React条件渲染
+
+```jsx
+function ConditionalComponent({ isLoggedIn, username }) {
+  return (
+    <div>
+      {isLoggedIn ? (
+        <h1>欢迎回来，{username}！</h1>
+      ) : (
+        <h1>请登录</h1>
+      )}
+      
+      {/* 使用逻辑与运算符 */}
+      {isLoggedIn && <button>退出登录</button>}
+    </div>
+  );
+}
+```
+
+## React列表渲染
+
+```jsx
+function ProductList({ products }) {
+  return (
+    <ul>
+      {products.map((product) => (
+        <li key={product.id}>
+          <h3>{product.name}</h3>
+          <p>¥{product.price}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## React表单处理
+
+### 受控组件
+
+```jsx
+'use client';
+
+import { useState } from 'react';
+
+export default function LoginForm() {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('表单数据:', formData);
+    // 处理登录逻辑
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="username">用户名:</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="password">密码:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <button type="submit">登录</button>
+    </form>
+  );
+}
+```
+
+### Next.js中的表单处理（Server Actions）
+
+```jsx
+// app/contact/page.jsx
+export default function ContactForm() {
+  async function handleSubmit(formData) {
+    'use server';
+    
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const message = formData.get('message');
+    
+    // 服务器端处理逻辑
+    await saveContactMessage({ name, email, message });
+  }
+  
+  return (
+    <form action={handleSubmit}>
+      <input name="name" placeholder="姓名" required />
+      <input name="email" type="email" placeholder="邮箱" required />
+      <textarea name="message" placeholder="留言" required></textarea>
+      <button type="submit">提交</button>
+    </form>
+  );
+}
+```
+
+## React常用钩子
+
+### useContext
+
+创建和使用上下文：
+
+```jsx
+'use client';
+
+import { createContext, useContext, useState } from 'react';
+
+// 创建上下文
+const ThemeContext = createContext(null);
+
+// 提供者组件
+export function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('light');
+  
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+  
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+// 使用上下文的组件
+export function ThemedButton() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  
+  return (
+    <button 
+      onClick={toggleTheme}
+      style={{ 
+        backgroundColor: theme === 'light' ? '#fff' : '#333',
+        color: theme === 'light' ? '#333' : '#fff'
+      }}
+    >
+      切换到{theme === 'light' ? '深色' : '浅色'}模式
+    </button>
+  );
+}
+```
+
+### useReducer
+
+处理复杂状态逻辑：
+
+```jsx
+'use client';
+
+import { useReducer } from 'react';
+
+// 定义初始状态
+const initialState = { count: 0 };
+
+// 定义reducer函数
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    case 'reset':
+      return { count: 0 };
+    default:
+      throw new Error('未知操作');
+  }
+}
+
+export default function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  
+  return (
+    <div>
+      <p>计数: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+      <button onClick={() => dispatch({ type: 'reset' })}>重置</button>
+    </div>
+  );
+}
+```
+
+### useMemo和useCallback
+
+优化性能：
+
+```jsx
+'use client';
+
+import { useState, useMemo, useCallback } from 'react';
+
+export default function ExpensiveCalculation({ list }) {
+  const [count, setCount] = useState(0);
+  
+  // 使用useMemo缓存计算结果
+  const expensiveResult = useMemo(() => {
+    console.log('执行昂贵计算...');
+    return list.reduce((total, item) => total + item, 0);
+  }, [list]); // 只有当list变化时才重新计算
+  
+  // 使用useCallback缓存函数
+  const handleClick = useCallback(() => {
+    setCount(c => c + 1);
+  }, []); // 空依赖数组意味着函数永远不会重新创建
+  
+  return (
+    <div>
+      <p>计数: {count}</p>
+      <p>计算结果: {expensiveResult}</p>
+      <button onClick={handleClick}>增加计数</button>
+    </div>
+  );
+}
+```
+
+## Next.js中的数据获取
+
+### 在服务器组件中获取数据
+
+```jsx
+// app/users/page.jsx
+export default async function UsersPage() {
+  // 这在服务器上执行，不会发送到客户端
+  const users = await fetch('https://api.example.com/users').then(res => res.json());
+  
+  return (
+    <div>
+      <h1>用户列表</h1>
+      <ul>
+        {users.map(user => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+### 在客户端组件中获取数据
+
+```jsx
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export default function ClientFetch() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/data');
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error('获取数据失败', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchData();
+  }, []);
+  
+  if (loading) return <p>加载中...</p>;
+  if (!data) return <p>无数据</p>;
+  
+  return (
+    <div>
+      <h1>客户端获取的数据</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+}
+```
+
+## 结论
+
+掌握React基础知识对于有效使用Next.js至关重要。通过理解组件、状态管理、钩子函数以及Next.js特有的功能（如服务器组件和客户端组件的区别），你可以充分利用Next.js框架的强大功能来构建高性能、用户友好的Web应用。
+
+随着你对React基础的深入理解，你将能够更好地利用Next.js提供的高级功能，如自动代码分割、服务器端渲染、静态站点生成等，从而创建出更加出色的Web体验。
