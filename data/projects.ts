@@ -14,4 +14,5 @@ export const projects: Projects[] = [
   { id: 3, title: "MRI-Principles", description: "磁共振原理", status: "building", progress: 0, projectUrl: "/mri-principles" },
   { id: 4, title: "MRI-Dictionary", description: "磁共振词典", status: "building", progress: 1, projectUrl: "/mri-dictionary" },
   { id: 5, title: "MRI-Bookshelf", description: "磁共振书架", status: "building", progress: 0, projectUrl: "/mri-bookshelf" },
+  { id: 6, title: "MRI-Quiz", description: "磁共振测试", status: "building", progress: 0, projectUrl: "/mri-quiz" },
 ]

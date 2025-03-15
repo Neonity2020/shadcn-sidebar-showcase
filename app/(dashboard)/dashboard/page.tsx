@@ -7,7 +7,7 @@ import { signOut } from "next-auth/react"
 import { books } from "@/data/books"
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, BookOpen, Brain, GraduationCap, Microscope, Presentation, FolderGit2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export default function DashboardPage() {
@@ -84,6 +84,66 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* 项目导航卡片 */}
+      <Card>
+        <CardHeader>
+          <CardTitle>网站导航</CardTitle>
+          <CardDescription>快速访问所有网站项目</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <Button
+              variant="outline"
+              className="h-auto py-4 flex flex-col items-center gap-2"
+              onClick={() => router.push('/mri-dictionary')}
+            >
+              <BookOpen className="h-6 w-6" />
+              <span>MRI词典</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto py-4 flex flex-col items-center gap-2"
+              onClick={() => router.push('/mri-principles')}
+            >
+              <Brain className="h-6 w-6" />
+              <span>MRI原理</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto py-4 flex flex-col items-center gap-2"
+              onClick={() => router.push('/mri-quiz')}
+            >
+              <GraduationCap className="h-6 w-6" />
+              <span>MRI测验</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto py-4 flex flex-col items-center gap-2"
+              onClick={() => router.push('/mri-techs')}
+            >
+              <Microscope className="h-6 w-6" />
+              <span>MRI技术</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto py-4 flex flex-col items-center gap-2"
+              onClick={() => router.push('/showcases')}
+            >
+              <Presentation className="h-6 w-6" />
+              <span>案例展示</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto py-4 flex flex-col items-center gap-2"
+              onClick={() => router.push('/projects')}
+            >
+              <FolderGit2 className="h-6 w-6" />
+              <span>项目列表</span>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* 图书轮播图组件 */}
       <Card className="overflow-hidden">
