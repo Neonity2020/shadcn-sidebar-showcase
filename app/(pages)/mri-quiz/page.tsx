@@ -12,15 +12,36 @@ export default function MRIQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);
 
   const handleAnswerClick = (answerIndex: number) => {
-    setSelectedAnswer(answerIndex);
+    const currentQuestionData = mriQuiz.questions[currentQuestion];
+    
+    setSelectedAnswers(prev => {
+      if (currentQuestionData.type === 'single') {
+        return [answerIndex];
+      } else {
+        if (prev.includes(answerIndex)) {
+          return prev.filter(index => index !== answerIndex);
+        } else {
+          return [...prev, answerIndex];
+        }
+      }
+    });
   };
 
   const handleNext = () => {
-    if (selectedAnswer === mriQuiz.questions[currentQuestion].correctAnswer) {
+    const currentQuestionData = mriQuiz.questions[currentQuestion];
+    const correctAnswer = currentQuestionData.correctAnswer;
+    
+    // 检查答案是否正确
+    const isCorrect = Array.isArray(correctAnswer)
+      ? selectedAnswers.length === correctAnswer.length &&
+        correctAnswer.every(answer => selectedAnswers.includes(answer))
+      : selectedAnswers.length === 1 && selectedAnswers[0] === correctAnswer;
+
+    if (isCorrect) {
       setScore(score + 1);
     }
     setShowFeedback(true);
@@ -29,7 +50,7 @@ export default function MRIQuiz() {
   const handleContinue = () => {
     if (currentQuestion + 1 < mriQuiz.questions.length) {
       setCurrentQuestion(currentQuestion + 1);
-      setSelectedAnswer(null);
+      setSelectedAnswers([]);
       setShowFeedback(false);
     } else {
       setShowScore(true);
@@ -37,6 +58,17 @@ export default function MRIQuiz() {
   };
 
   const progress = ((currentQuestion + 1) / mriQuiz.questions.length) * 100;
+
+  const isAnswerSelected = (index: number) => {
+    return selectedAnswers.includes(index);
+  };
+
+  const isCorrectAnswer = (index: number) => {
+    const correctAnswer = mriQuiz.questions[currentQuestion].correctAnswer;
+    return Array.isArray(correctAnswer)
+      ? correctAnswer.includes(index)
+      : correctAnswer === index;
+  };
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
@@ -51,19 +83,24 @@ export default function MRIQuiz() {
             <CardTitle>问题 {currentQuestion + 1}/{mriQuiz.questions.length}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xl mb-6">{mriQuiz.questions[currentQuestion].question}</p>
+            <div className="flex justify-between items-center mb-4">
+              <p className="text-xl">{mriQuiz.questions[currentQuestion].question}</p>
+              <span className="text-sm text-gray-500">
+                {mriQuiz.questions[currentQuestion].type === 'single' ? '单选题' : '多选题'}
+              </span>
+            </div>
             <div className="space-y-4">
               {mriQuiz.questions[currentQuestion].options.map((option, index) => (
                 <Button
                   key={index}
                   variant={
                     showFeedback
-                      ? index === mriQuiz.questions[currentQuestion].correctAnswer
+                      ? isCorrectAnswer(index)
                         ? "default"
-                        : selectedAnswer === index
+                        : isAnswerSelected(index)
                         ? "destructive"
                         : "outline"
-                      : selectedAnswer === index
+                      : isAnswerSelected(index)
                       ? "default"
                       : "outline"
                   }
@@ -77,8 +114,8 @@ export default function MRIQuiz() {
             </div>
             
             {showFeedback && (
-              <Alert className={`mt-4 ${selectedAnswer === mriQuiz.questions[currentQuestion].correctAnswer ? 'bg-green-50' : 'bg-red-50'}`}>
-                {selectedAnswer === mriQuiz.questions[currentQuestion].correctAnswer ? (
+              <Alert className={`mt-4 ${selectedAnswers.length > 0 && isCorrectAnswer(selectedAnswers[0]) ? 'bg-green-50' : 'bg-red-50'}`}>
+                {selectedAnswers.length > 0 && isCorrectAnswer(selectedAnswers[0]) ? (
                   <CheckCircle2 className="h-4 w-4 text-green-500" />
                 ) : (
                   <XCircle className="h-4 w-4 text-red-500" />
@@ -92,7 +129,7 @@ export default function MRIQuiz() {
             <Button
               className="mt-6 w-full"
               onClick={showFeedback ? handleContinue : handleNext}
-              disabled={selectedAnswer === null}
+              disabled={selectedAnswers.length === 0}
             >
               {showFeedback 
                 ? (currentQuestion === mriQuiz.questions.length - 1 ? "完成" : "继续")
@@ -118,7 +155,7 @@ export default function MRIQuiz() {
                 setCurrentQuestion(0);
                 setScore(0);
                 setShowScore(false);
-                setSelectedAnswer(null);
+                setSelectedAnswers([]);
                 setShowFeedback(false);
               }}
             >
