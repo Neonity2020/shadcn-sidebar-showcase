@@ -131,7 +131,7 @@ export default function DashboardPage() {
               onClick={() => router.push('/showcases')}
             >
               <Presentation className="h-6 w-6" />
-              <span>案例展示</span>
+              <span>病例图像展示</span>
             </Button>
             <Button
               variant="outline"

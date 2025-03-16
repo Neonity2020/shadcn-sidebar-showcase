@@ -12,9 +12,7 @@ export default async function MDXExamplePage() {
       <div className="prose dark:prose-invert max-w-none">
         <MDXRemote 
           source={source} 
-          components={{
-            MDXComponents
-          }}
+          components={MDXComponents}
         />
       </div>
     </div>

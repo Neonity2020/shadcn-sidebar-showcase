@@ -1,0 +1,112 @@
+---
+title: "在 Netlify 上设置环境变量：Next.js + Supabase + Prisma 项目部署指南"
+description: "详细指南：如何在 Netlify 上正确配置环境变量，确保 Next.js、Supabase 和 Prisma 项目顺利部署"
+date: "2024-03-21"
+tags: ["部署", "Netlify", "Next.js", "Supabase", "Prisma"]
+---
+
+
+部署现代 Web 应用时，环境变量的正确配置至关重要。本文将指导您如何在 Netlify 上正确设置环境变量，特别是针对使用 Next.js 15、Supabase 和 Prisma 的项目。
+
+## 为什么需要环境变量？
+
+环境变量用于存储敏感信息和配置数据，例如：
+- 数据库连接字符串
+- API 密钥
+- 认证信息
+- 服务端点 URL
+
+这些信息不应该直接硬编码在代码中，而是应该通过环境变量来管理。
+
+## 在 Netlify 上设置环境变量
+
+### 1. 登录 Netlify 控制台
+
+首先，登录您的 Netlify 账户并进入项目控制台。
+
+### 2. 访问环境变量设置
+
+1. 在项目控制台中，点击 "Site settings"
+2. 在左侧菜单中找到 "Build & deploy"
+3. 展开 "Environment variables" 部分
+
+### 3. 配置必要的环境变量
+
+对于 Next.js + Supabase + Prisma 项目，您需要设置以下环境变量：
+
+#### Supabase 相关变量
+```
+NEXT_PUBLIC_SUPABASE_URL=你的_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=你的_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY=你的_SERVICE_ROLE_KEY
+```
+
+#### Prisma 相关变量
+```
+DATABASE_URL=你的_DATABASE_URL
+```
+
+#### Next.js 相关变量
+```
+NEXT_PUBLIC_APP_URL=你的_应用_URL
+```
+
+### 4. 添加环境变量
+
+1. 点击 "Add a variable"
+2. 输入变量名和值
+3. 选择环境（Production、Deploy previews 或 Branch deploys）
+4. 点击 "Save"
+
+## 最佳实践
+
+### 1. 使用 .env.example 文件
+
+在项目中创建一个 `.env.example` 文件，列出所有需要的环境变量（不包含实际值）：
+
+```plaintext
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+DATABASE_URL=
+NEXT_PUBLIC_APP_URL=
+```
+
+### 2. 环境变量命名规范
+
+- 使用 `NEXT_PUBLIC_` 前缀标记需要在客户端可访问的变量
+- 使用大写字母和下划线命名
+- 保持命名简洁明了
+
+### 3. 安全性考虑
+
+- 永远不要在代码仓库中提交实际的 `.env` 文件
+- 定期轮换密钥和密码
+- 使用最小权限原则设置服务角色密钥
+
+## 常见问题解决
+
+### 1. 环境变量未生效
+
+如果部署后发现环境变量未生效，请检查：
+- 变量名是否正确
+- 是否选择了正确的环境
+- 是否需要重新部署项目
+
+### 2. 客户端访问问题
+
+如果客户端无法访问某些变量，确保：
+- 变量名以 `NEXT_PUBLIC_` 开头
+- 在 Next.js 配置中正确设置了环境变量
+
+## 总结
+
+正确配置环境变量是确保应用安全部署的关键步骤。通过遵循本文的指南，您可以确保您的 Next.js + Supabase + Prisma 项目在 Netlify 上安全且正确地运行。
+
+记住：
+- 仔细管理敏感信息
+- 遵循最佳实践
+- 定期检查和更新环境变量
+- 保持部署流程的安全性
+
+如果您在设置过程中遇到任何问题，欢迎在评论区留言讨论。

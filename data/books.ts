@@ -495,5 +495,70 @@ export const books: Book[] = [
         }
       ]
     }
+  },
+  { 
+    id: 10,
+    title: "Oxford Textbook of Clinical Neuroimaging",
+    cover: "/covers/10.jpg",
+    status: "reading",
+    description: "牛津临床神经影像学教科书 - 权威的神经影像学临床指南",
+    progress: 30,
+    directories: [
+      "Part 1: Basic Principles",
+      "├─ Chapter 1: Clinical Approach to Neurological Disorders",
+      "├─ Chapter 2: Neuroanatomy and Neurophysiology",
+      "├─ Chapter 3: Neurological Examination",
+      "Part 2: Common Neurological Disorders",
+      "├─ Chapter 4: Headache and Pain Disorders",
+      "├─ Chapter 5: Epilepsy and Seizure Disorders",
+      "├─ Chapter 6: Movement Disorders",
+      "├─ Chapter 7: Neuromuscular Disorders",
+      "Part 3: Special Topics",
+      "├─ Chapter 8: Neuroimaging in Clinical Practice",
+      "├─ Chapter 9: Neurogenetics",
+      "└─ Chapter 10: Neurorehabilitation"
+    ],
+    downloadUrl: "https://pan.baidu.com/s/1xK8Y9Z2A3B4C5D6E7F8G9H?pwd=oxfd",
+    readingMode: {
+      currentPage: 156,
+      totalPages: 520,
+      bookmarks: [
+        {
+          page: 78,
+          note: "神经系统查体要点",
+          timestamp: "2024-03-18T14:30:00Z"
+        },
+        {
+          page: 123,
+          note: "癫痫分类与诊断标准",
+          timestamp: "2024-03-19T09:15:00Z"
+        }
+      ],
+      lastRead: "2024-03-20T16:45:00Z",
+      highlights: [
+        {
+          page: 92,
+          content: "神经系统定位诊断的基本原则",
+          color: "#FEB2B2",
+          timestamp: "2024-03-18T15:20:00Z"
+        }
+      ]
+    },
+    pageContent: {
+      1: {
+        text: "临床神经影像学是医学中最具挑战性和最令人着迷的领域之一，需要医生具备扎实的解剖学、生理学和病理学知识。",
+        keywords: ["临床神经影像学", "神经系统", "诊断"]
+      },
+      78: {
+        text: "神经系统查体是神经影像学诊断的基础，需要系统、全面地进行，包括意识状态、颅神经、运动系统、感觉系统、共济运动和反射等检查。",
+        keywords: ["神经系统查体", "诊断", "临床检查"],
+        imageDescriptions: ["神经系统查体示意图", "常见病理反射检查方法"]
+      },
+      92: {
+        text: "神经系统定位诊断是神经影像学诊断的核心，通过详细的病史采集和体格检查，结合神经解剖学知识，准确定位病变部位。",
+        keywords: ["定位诊断", "神经解剖", "临床诊断"],
+        imageDescriptions: ["神经系统定位诊断流程图", "常见病变定位示意图"]
+      }
+    }
   }
 ];
