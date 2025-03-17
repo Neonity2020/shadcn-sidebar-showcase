@@ -61,12 +61,12 @@ export default function DashboardPage() {
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span>总项目数</span>
-                <span className="font-semibold">12</span>
+                <span>全部书籍</span>
+                <span className="font-semibold">{books.length}</span>
               </div>
               <div className="flex justify-between">
-                <span>本周活跃天数</span>
-                <span className="font-semibold">5</span>
+                <span>在读书籍</span>
+                <span className="font-semibold">{books.filter(book => book.status === 'reading').length}</span>
               </div>
             </div>
           </CardContent>
