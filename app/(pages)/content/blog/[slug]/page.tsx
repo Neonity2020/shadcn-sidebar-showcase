@@ -145,22 +145,22 @@ export default async function ArticlePage({ params }: PageProps) {
   });
   
   return (
-    <div className="container mx-auto py-10">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">{data.title}</h1>
-        <div className="flex items-center text-sm text-gray-500">
-          {data.date && <span className="mr-4">发布日期: {data.date}</span>}
-          {data.author && <span className="mr-4">作者: {data.author}</span>}
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">{data.title}</h1>
+        <div className="flex flex-wrap items-center text-sm text-gray-500 gap-3 sm:gap-4">
+          {data.date && <span>发布日期: {data.date}</span>}
+          {data.author && <span>作者: {data.author}</span>}
           {data.category && (
-            <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full">
+            <span className="px-2.5 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full text-sm">
               {data.category}
             </span>
           )}
         </div>
       </div>
       
-      <div className="relative flex flex-col lg:flex-row gap-8">
-        <div className="prose dark:prose-invert max-w-none lg:w-3/4">
+      <div className="relative flex flex-col lg:flex-row gap-6 lg:gap-8">
+        <div className="prose dark:prose-invert max-w-none lg:w-3/4 prose-sm sm:prose-base">
           <MDXRemote 
             source={content} 
             components={{
@@ -173,13 +173,13 @@ export default async function ArticlePage({ params }: PageProps) {
           />
           
           {data.tags && data.tags.length > 0 && (
-            <div className="mt-8 pt-4 border-t">
-              <h3 className="text-lg font-semibold mb-2">标签:</h3>
+            <div className="mt-6 sm:mt-8 pt-4 border-t">
+              <h3 className="text-base sm:text-lg font-semibold mb-2">标签:</h3>
               <div className="flex flex-wrap gap-2">
                 {data.tags.map((tag: string) => (
                   <span 
                     key={tag} 
-                    className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm"
+                    className="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm"
                   >
                     {tag}
                   </span>
@@ -190,7 +190,9 @@ export default async function ArticlePage({ params }: PageProps) {
         </div>
         
         <div className="lg:w-1/4">
-          <FloatingTableOfContents />
+          <div className="lg:sticky lg:top-6">
+            <FloatingTableOfContents />
+          </div>
         </div>
       </div>
     </div>

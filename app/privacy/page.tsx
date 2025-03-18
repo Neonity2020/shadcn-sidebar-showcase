@@ -1,7 +1,13 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Menu, X } from "lucide-react"
+import { useState } from "react"
 
 export default function Privacy() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col">
       {/* 导航栏 */}
@@ -10,7 +16,9 @@ export default function Privacy() {
           <Link href="/" className="text-2xl font-bold text-gray-900">
             MRI-Library
           </Link>
-          <div className="space-x-4">
+          
+          {/* 桌面端导航 */}
+          <div className="hidden md:flex space-x-4">
             <Link href="/login">
               <Button variant="ghost">登录</Button>
             </Link>
@@ -18,20 +26,54 @@ export default function Privacy() {
               <Button>注册</Button>
             </Link>
           </div>
+
+          {/* 移动端菜单按钮 */}
+          <button
+            className="md:hidden p-2 rounded-md hover:bg-gray-100"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6 text-gray-600" />
+            ) : (
+              <Menu className="h-6 w-6 text-gray-600" />
+            )}
+          </button>
         </div>
+
+        {/* 移动端抽屉菜单 */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-b">
+            <div className="container mx-auto px-4 py-4 space-y-4">
+              <Link
+                href="/login"
+                className="block w-full text-center py-2 text-gray-600 hover:text-gray-900"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                登录
+              </Link>
+              <Link
+                href="/register"
+                className="block w-full text-center py-2 text-gray-600 hover:text-gray-900"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                注册
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* 主要内容 */}
       <main className="container mx-auto px-4 pt-32 flex-grow mb-16">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
             隐私政策
           </h1>
 
-          <div className="bg-white p-8 rounded-lg shadow-sm space-y-8">
+          <div className="bg-white p-4 md:p-8 rounded-lg shadow-sm space-y-6 md:space-y-8">
             {/* 简介 */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">简介</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">简介</h2>
               <p className="text-gray-600">
                 本隐私政策说明了 MRI-Library 如何收集、使用、披露、处理和保护您在使用我们的服务时提供的信息。我们非常重视您的隐私，并致力于保护您的个人信息。
               </p>
@@ -39,7 +81,7 @@ export default function Privacy() {
 
             {/* 信息收集 */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">信息收集</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">信息收集</h2>
               <p className="text-gray-600 mb-4">
                 我们收集的信息包括但不限于：
               </p>
@@ -54,7 +96,7 @@ export default function Privacy() {
 
             {/* 信息使用 */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">信息使用</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">信息使用</h2>
               <p className="text-gray-600 mb-4">
                 我们使用收集的信息用于：
               </p>
@@ -69,7 +111,7 @@ export default function Privacy() {
 
             {/* 信息共享 */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">信息共享</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">信息共享</h2>
               <p className="text-gray-600">
                 我们不会将您的个人信息出售或出租给第三方。仅在以下情况下，我们可能会共享您的信息：
               </p>
@@ -83,7 +125,7 @@ export default function Privacy() {
 
             {/* 信息安全 */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">信息安全</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">信息安全</h2>
               <p className="text-gray-600">
                 我们采取多种安全措施保护您的个人信息，包括但不限于：
               </p>
@@ -97,7 +139,7 @@ export default function Privacy() {
 
             {/* 用户权利 */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">用户权利</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">用户权利</h2>
               <p className="text-gray-600 mb-4">
                 您对个人信息拥有以下权利：
               </p>
@@ -112,7 +154,7 @@ export default function Privacy() {
 
             {/* 政策更新 */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">政策更新</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">政策更新</h2>
               <p className="text-gray-600">
                 我们可能会不时更新本隐私政策。更新后的政策将在网站上公布，并标注更新时间。建议您定期查看本政策以了解任何变更。
               </p>
@@ -120,7 +162,7 @@ export default function Privacy() {
 
             {/* 联系我们 */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">联系我们</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">联系我们</h2>
               <p className="text-gray-600 mb-4">
                 如果您对本隐私政策有任何疑问或建议，请通过以下方式联系我们：
               </p>
@@ -137,7 +179,7 @@ export default function Privacy() {
       {/* 页脚 */}
       <footer className="bg-white border-t mt-auto">
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">关于我们</h3>
               <p className="text-gray-600">
