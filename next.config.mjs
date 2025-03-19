@@ -13,13 +13,18 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
-    domains: ['localhost'],
+    domains: ['localhost', 'i0.hdslb.com'],
     remotePatterns: [
       {
         protocol: 'http',
         hostname: 'localhost',
         port: '3000',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i0.hdslb.com',
+        pathname: '/bfs/**',
       },
     ],
     dangerouslyAllowSVG: true,
