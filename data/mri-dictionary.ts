@@ -73,6 +73,67 @@ export const dictionaryData: DictionaryEntry[] = [
     ]
   },
   {
+    term: 'CAIPIRINHA (Controlled Aliasing In Parallel Imaging Results IN Higher Acceleration)',
+    definition: `**控制混叠并行成像加速技术**，是一种由西门子公司开发的先进并行成像技术。其主要特点包括：
+
+### 基本原理
+- 通过控制k空间采样模式来优化并行成像
+- 利用特定的相位编码梯度来产生可控的混叠模式
+- 结合并行成像算法进行图像重建
+- 通过优化采样轨迹提高加速效率
+
+### 技术特点
+1. **采样策略**：
+   - 采用特定的相位编码梯度
+   - 产生可控的混叠模式
+   - 优化k空间覆盖
+
+2. **重建算法**：
+   - 结合并行成像技术
+   - 利用可控混叠模式
+   - 提高重建质量
+
+3. **加速因子**：
+   - 支持更高的加速因子
+   - 降低几何因子(g-factor)
+   - 提高信噪比
+
+### 临床应用
+- 高分辨率成像
+- 快速动态成像
+- 功能MRI
+- 扩散加权成像
+- 灌注成像
+
+### 优势与局限性
+**优势**：
+- 支持更高的加速因子
+- 降低几何因子
+- 提高图像质量
+- 减少扫描时间
+
+**局限性**：
+- 需要特殊的硬件支持
+- 对运动伪影敏感
+- 重建算法复杂
+- 临床应用经验有限`,
+    category: '并行成像技术',
+    relatedReadings: [
+      {
+        title: 'CAIPIRINHA技术原理',
+        url: '/content/articles/caipirinha-principles'
+      },
+      {
+        title: 'CAIPIRINHA在临床中的应用',
+        url: '/content/articles/caipirinha-applications'
+      },
+      {
+        title: '高级并行成像技术比较',
+        url: '/content/articles/advanced-parallel-imaging'
+      }
+    ]
+  },
+  {
     term: 'DKI (Diffusion Kurtosis Imaging)',
     definition: `**扩散峰度成像**，是一种扩展的扩散MRI技术，通过测量水分子扩散分布的非高斯特性来提供组织微结构的信息。其主要特点包括：
 

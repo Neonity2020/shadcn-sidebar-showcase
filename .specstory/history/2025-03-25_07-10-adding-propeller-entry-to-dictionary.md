@@ -791,11 +791,185 @@ _**Assistant**_
 
 ---
 
-Cancelled
+```diff
+  
+  export const dictionaryData: DictionaryEntry[] = [
++   {
++     term: 'BLADE',
++     definition: `**BLADE序列**，也称为PROPELLER（Periodically Rotated Overlapping Parallel Lines with Enhanced Reconstruction），是西门子公司开发的一种特殊的MRI采集和重建技术。其主要特点包括：
++ 
++ ### 基本原理
++ - 采用螺旋桨式k空间填充方式
++ - 通过重叠采样提供冗余信息
++ - 利用并行成像技术加速采集
++ - 通过迭代重建算法提高图像质量
++ 
++ ### 技术特点
++ 1. **k空间填充方式**：
++    - 以螺旋桨叶片状方式填充k空间
++    - 每个叶片包含多条平行线
++    - 叶片之间有一定重叠区域
++ 
++ 2. **运动校正**：
++    - 利用重叠区域进行运动检测
++    - 通过迭代重建算法校正运动伪影
++    - 特别适合头部和腹部成像
++ 
++ 3. **并行成像**：
++    - 结合SENSE或GRAPPA技术
++    - 提高采集效率
++    - 减少扫描时间
++ 
++ ### 临床应用
++ - 头部MRI（减少患者运动伪影）
++ - 腹部MRI（减少呼吸运动伪影）
++ - 儿童MRI检查
++ - 不配合患者的检查
++ - 需要高质量图像的临床研究
++ 
++ ### 优势与局限性
++ **优势**：
++ - 显著减少运动伪影
++ - 提高图像质量
++ - 适合不配合患者
++ - 可与其他序列结合使用
++ 
++ **局限性**：
++ - 扫描时间相对较长
++ - 需要特殊的重建算法
++ - 对硬件要求较高
++ - 可能产生特殊的重建伪影`,
++     category: '特殊成像技术',
++     relatedReadings: [
++       {
++         title: 'BLADE技术原理',
++         url: '/content/articles/blade-principles'
++       },
++       {
++         title: 'BLADE在临床中的应用',
++         url: '/content/articles/blade-applications'
++       },
++       {
++         title: 'MRI运动伪影校正技术比较',
++         url: '/content/articles/motion-artifact-correction'
++       }
++     ]
++   },
+    {
+      term: 'DKI (Diffusion Kurtosis Imaging)',
+```
 
 ---
 
+我已经成功添加了BLADE词条，并将其放在了按字母顺序排列的适当位置（在DKI之前）。新添加的词条包含了：
 
+1. 完整的技术定义和原理说明
+2. 详细的技术特点描述
+3. 临床应用场景
+4. 优势和局限性的分析
+5. 相关的阅读材料链接
+
+词条被归类为"特殊成像技术"类别，并包含了三个相关的阅读材料链接。内容采用了清晰的Markdown格式，便于阅读和理解。
+
+您需要我对这个新添加的词条做任何修改或补充吗？
+
+---
+
+_**User**_
+
+添加CAIPIRINHA词条
+
+---
+
+_**Assistant**_
+
+我来帮您添加CAIPIRINHA词条，并将其按字母顺序插入到适当的位置。
+
+
+---
+
+```diff
+      ]
+    },
++   {
++     term: 'CAIPIRINHA (Controlled Aliasing In Parallel Imaging Results IN Higher Acceleration)',
++     definition: `**控制混叠并行成像加速技术**，是一种由西门子公司开发的先进并行成像技术。其主要特点包括：
++ 
++ ### 基本原理
++ - 通过控制k空间采样模式来优化并行成像
++ - 利用特定的相位编码梯度来产生可控的混叠模式
++ - 结合并行成像算法进行图像重建
++ - 通过优化采样轨迹提高加速效率
++ 
++ ### 技术特点
++ 1. **采样策略**：
++    - 采用特定的相位编码梯度
++    - 产生可控的混叠模式
++    - 优化k空间覆盖
++ 
++ 2. **重建算法**：
++    - 结合并行成像技术
++    - 利用可控混叠模式
++    - 提高重建质量
++ 
++ 3. **加速因子**：
++    - 支持更高的加速因子
++    - 降低几何因子(g-factor)
++    - 提高信噪比
++ 
++ ### 临床应用
++ - 高分辨率成像
++ - 快速动态成像
++ - 功能MRI
++ - 扩散加权成像
++ - 灌注成像
++ 
++ ### 优势与局限性
++ **优势**：
++ - 支持更高的加速因子
++ - 降低几何因子
++ - 提高图像质量
++ - 减少扫描时间
++ 
++ **局限性**：
++ - 需要特殊的硬件支持
++ - 对运动伪影敏感
++ - 重建算法复杂
++ - 临床应用经验有限`,
++     category: '并行成像技术',
++     relatedReadings: [
++       {
++         title: 'CAIPIRINHA技术原理',
++         url: '/content/articles/caipirinha-principles'
++       },
++       {
++         title: 'CAIPIRINHA在临床中的应用',
++         url: '/content/articles/caipirinha-applications'
++       },
++       {
++         title: '高级并行成像技术比较',
++         url: '/content/articles/advanced-parallel-imaging'
++       }
++     ]
++   },
+    {
+      term: 'DKI (Diffusion Kurtosis Imaging)',
+```
+
+---
+
+我已经成功添加了CAIPIRINHA词条，并将其放在了按字母顺序排列的适当位置（在BLADE之后，DKI之前）。新添加的词条包含了：
+
+1. 完整的技术名称和缩写解释
+2. 详细的技术定义和原理说明
+3. 技术特点的详细描述
+4. 临床应用场景
+5. 优势和局限性的分析
+6. 相关的阅读材料链接
+
+词条被归类为"并行成像技术"类别，并包含了三个相关的阅读材料链接。内容采用了清晰的Markdown格式，便于阅读和理解。
+
+您需要我对这个新添加的词条做任何修改或补充吗？
 
 ---
 
